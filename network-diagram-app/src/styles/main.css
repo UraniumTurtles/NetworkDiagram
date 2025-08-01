@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.network-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.firewall {
+    background-color: #ffcc00;
+    border: 2px solid #cc9900;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 200px;
+    text-align: center;
+}
+
+.switch {
+    background-color: #66ccff;
+    border: 2px solid #3399cc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+}
+
+.host {
+    background-color: #99ff99;
+    border: 2px solid #66cc66;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+}
+
+.vm {
+    background-color: #ff99cc;
+    border: 2px solid #cc6699;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    width: 120px;
+    text-align: center;
+}
+
+.access-point {
+    background-color: #ffccff;
+    border: 2px solid #cc99cc;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 130px;
+    text-align: center;
+}
