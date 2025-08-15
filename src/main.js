@@ -2,73 +2,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     const root = document.getElementById('root');
 
-    // Sample data for the network diagram
-    const networkData = {
-        firewall: { id: 'fw1', name: 'Firewall' },
-        switches: [
-            { id: 'sw1', name: 'Switch 1' },
-            { id: 'sw2', name: 'Switch 2' },
-            { id: 'sw3', name: 'Switch 3' },
-            { id: 'sw4', name: 'Switch 4' }
-        ],
-        hosts: [
-            { id: 'host1', name: 'Host 1', vms: [{ id: 'vm1', name: 'VM 1' }, { id: 'vm2', name: 'VM 2' }, { id: 'vm3', name: 'VM 3' }, { id: 'vm4', name: 'VM 4' }] },
-            { id: 'host2', name: 'Host 2', vms: [{ id: 'vm5', name: 'VM 5' }, { id: 'vm6', name: 'VM 6' }, { id: 'vm7', name: 'VM 7' }, { id: 'vm8', name: 'VM 8' }] }
-        ],
-        accessPoints: [
-            { id: 'ap1', name: 'Access Point 1' },
-            { id: 'ap2', name: 'Access Point 2' },
-            { id: 'ap3', name: 'Access Point 3' },
-            { id: 'ap4', name: 'Access Point 4' },
-            { id: 'ap5', name: 'Access Point 5' },
-            { id: 'ap6', name: 'Access Point 6' }
-        ]
-    };
-
-    // Function to render the network diagram
-    function renderNetworkDiagram() {
-        const diagram = document.createElement('div');
-        diagram.className = 'network-diagram';
-
-        // Render Firewall
-        const firewall = document.createElement('div');
-        firewall.className = 'firewall';
-        firewall.innerText = networkData.firewall.name;
-        diagram.appendChild(firewall);
-
-        // Render Switches
-        networkData.switches.forEach(switchItem => {
-            const switchDiv = document.createElement('div');
-            switchDiv.className = 'switch';
-            switchDiv.innerText = switchItem.name;
-            diagram.appendChild(switchDiv);
-        });
-
-        // Render Hosts and their VMs
-        networkData.hosts.forEach(host => {
-            const hostDiv = document.createElement('div');
-            hostDiv.className = 'host';
-            hostDiv.innerText = host.name;
-            diagram.appendChild(hostDiv);
-
-            host.vms.forEach(vm => {
-                const vmDiv = document.createElement('div');
-                vmDiv.className = 'vm';
-                vmDiv.innerText = vm.name;
-                hostDiv.appendChild(vmDiv);
-            });
-        });
-
-        // Render Access Points
-        networkData.accessPoints.forEach(ap => {
-            const apDiv = document.createElement('div');
-            apDiv.className = 'access-point';
-            apDiv.innerText = ap.name;
-            diagram.appendChild(apDiv);
-        });
-
-        root.appendChild(diagram);
-    }
-
-    renderNetworkDiagram();
+    root.innerHTML = `
+    <svg width="700" height="400">
+      <!-- Firewall -->
+      <rect x="300" y="40" width="100" height="40" fill="#f8c471" stroke="#333" stroke-width="2"/>
+      <text x="350" y="65" text-anchor="middle" font-size="16">Firewall</text>
+      
+      <!-- Switches -->
+      <rect x="180" y="120" width="100" height="40" fill="#aed6f1" stroke="#333" stroke-width="2"/>
+      <text x="230" y="145" text-anchor="middle" font-size="16">Switch 1</text>
+      <rect x="420" y="120" width="100" height="40" fill="#aed6f1" stroke="#333" stroke-width="2"/>
+      <text x="470" y="145" text-anchor="middle" font-size="16">Switch 2</text>
+      
+      <!-- APs -->
+      <ellipse cx="130" cy="220" rx="40" ry="25" fill="#abebc6" stroke="#333" stroke-width="2"/>
+      <text x="130" y="225" text-anchor="middle" font-size="14">AP 1</text>
+      <ellipse cx="230" cy="220" rx="40" ry="25" fill="#abebc6" stroke="#333" stroke-width="2"/>
+      <text x="230" y="225" text-anchor="middle" font-size="14">AP 2</text>
+      <ellipse cx="470" cy="220" rx="40" ry="25" fill="#abebc6" stroke="#333" stroke-width="2"/>
+      <text x="470" y="225" text-anchor="middle" font-size="14">AP 3</text>
+      <ellipse cx="570" cy="220" rx="40" ry="25" fill="#abebc6" stroke="#333" stroke-width="2"/>
+      <text x="570" y="225" text-anchor="middle" font-size="14">AP 4</text>
+      
+      <!-- Connections -->
+      <line x1="350" y1="80" x2="230" y2="120" stroke="#333" stroke-width="2"/>
+      <line x1="350" y1="80" x2="470" y2="120" stroke="#333" stroke-width="2"/>
+      <line x1="230" y1="160" x2="130" y2="195" stroke="#333" stroke-width="2"/>
+      <line x1="230" y1="160" x2="230" y2="195" stroke="#333" stroke-width="2"/>
+      <line x1="470" y1="160" x2="470" y2="195" stroke="#333" stroke-width="2"/>
+      <line x1="470" y1="160" x2="570" y2="195" stroke="#333" stroke-width="2"/>
+    </svg>
+    `;
 });
