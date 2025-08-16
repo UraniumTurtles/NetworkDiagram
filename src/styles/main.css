@@ -76,11 +76,12 @@ line {
 }
 
 .host {
-    background-color: #ccccff;
+    fill: #ffe599;
 }
 
-.vm {
-    background-color: #ffffcc;
+.vm,
+.vm-label {
+    display: none;
 }
 
 .access-point {
