@@ -68,11 +68,11 @@ line {
 }
 
 .firewall {
-    background-color: #ffcccc;
+    fill: #f8c471;
 }
 
 .switch {
-    background-color: #ccffcc;
+    fill: #aed6f1;
 }
 
 .host {
@@ -84,5 +84,5 @@ line {
 }
 
 .access-point {
-    background-color: #ffccff;
+    fill: #abebc6;
 }
