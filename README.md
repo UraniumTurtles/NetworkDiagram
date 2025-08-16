@@ -28,7 +28,7 @@ network-diagram-app
 
 1. Clone the repository to your local machine.
 2. Navigate to the project directory.
-3. Open `src/index.html` in a web browser to view the network diagram.
+3. Open `https://uraniumturtles.github.io/NetworkDiagram/src/index.html` in a web browser to view the network diagram.
 
 ## Functionality
 
