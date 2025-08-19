@@ -35,40 +35,40 @@
 
           <!-- Connection lines -->
           <line x1="450" y1="100" x2="450" y2="150" />
-          <line x1="450" y1="182" x2="350" y2="210" /> <!-- Switch to Host 1 -->
-          <line x1="450" y1="182" x2="550" y2="210" /> <!-- Switch to Host 2 -->
-          <line x1="450" y1="182" x2="750" y2="270" /> <!-- Switch to AP -->
+          <line x1="450" y1="182" x2="350" y2="210" />
+          <line x1="450" y1="182" x2="550" y2="210" />
+          <line x1="450" y1="182" x2="750" y2="270" />
 
           <!-- Devices -->
           <rect x="410" y="70" width="80" height="32" class="firewall" stroke="#333" stroke-width="2"
-            data-hostname="FW-GFK" data-serial="FW001" data-ip="10.1.1.1"/>
+            data-hostname="GFK-64-Envision" data-serial="FW001" data-ip="192.168.54.1" data-model="SonicWall TZ370"/>
           <text x="450" y="92" text-anchor="middle" font-size="14">Firewall</text>
           <rect x="410" y="150" width="80" height="32" class="switch" stroke="#333" stroke-width="2"
-            data-hostname="SW-GFK" data-serial="SW001" data-ip="10.1.1.2"/>
+            data-hostname="SW-GFK" data-serial="SW001" data-ip="10.1.1.2" data-model=""/>
           <text x="450" y="172" text-anchor="middle" font-size="14">Switch</text>
           <ellipse cx="750" cy="270" rx="35" ry="20" class="access-point" stroke="#333" stroke-width="2"
-            data-hostname="AP-GFK" data-serial="AP001" data-ip="10.1.1.101"/>
+            data-hostname="GFK-AP1" data-serial="" data-ip="192.168.64.101" data-model="AP-535"/>
           <text x="750" y="275" text-anchor="middle" font-size="13">AP</text>
 
           <!-- Hosts together -->
           <rect x="310" y="210" width="80" height="32" class="host" stroke="#333" stroke-width="2"
-            data-hostname="Host1-GFK" data-serial="HOST001" data-ip="10.1.1.10"/>
+            data-hostname="Host1-GFK" data-serial="HOST001" data-ip="10.1.1.10" data-model=""/>
           <text x="350" y="232" text-anchor="middle" font-size="12">Host 1</text>
           <rect x="510" y="210" width="80" height="32" class="host" stroke="#333" stroke-width="2"
-            data-hostname="Host2-GFK" data-serial="HOST002" data-ip="10.1.1.11"/>
+            data-hostname="Host2-GFK" data-serial="HOST002" data-ip="10.1.1.11" data-model=""/>
           <text x="550" y="232" text-anchor="middle" font-size="12">Host 2</text>
 
           <!-- VMs for Host 1 -->
           <rect x="330" y="260" width="40" height="22" class="vm vm-host1" stroke="#333" stroke-width="2"
-            data-hostname="VM1-GFK" data-serial="VM001" data-ip="10.1.1.20"/>
+            data-hostname="VM1-GFK" data-serial="VM001" data-ip="10.1.1.20" data-model=""/>
           <text x="350" y="275" text-anchor="middle" font-size="11" class="vm-label">VM 1</text>
 
           <!-- VMs for Host 2 -->
           <rect x="530" y="260" width="40" height="22" class="vm vm-host2" stroke="#333" stroke-width="2"
-            data-hostname="VM2-GFK" data-serial="VM002" data-ip="10.1.1.21"/>
+            data-hostname="VM2-GFK" data-serial="VM002" data-ip="10.1.1.21" data-model=""/>
           <text x="550" y="275" text-anchor="middle" font-size="11" class="vm-label">VM 2</text>
           <rect x="580" y="260" width="40" height="22" class="vm vm-host2" stroke="#333" stroke-width="2"
-            data-hostname="VM3-GFK" data-serial="VM003" data-ip="10.1.1.22"/>
+            data-hostname="VM3-GFK" data-serial="VM003" data-ip="10.1.1.22" data-model=""/>
           <text x="600" y="275" text-anchor="middle" font-size="11" class="vm-label">VM 3</text>
         </svg>
       `;
@@ -99,6 +99,7 @@
           tooltip.style.display = 'block';
           tooltip.innerHTML = `
             <strong>Hostname:</strong> ${target.dataset.hostname}<br>
+            <strong>Model:</strong> ${target.dataset.model || ''}<br>
             <strong>Serial:</strong> ${target.dataset.serial}<br>
             <strong>IP:</strong> ${target.dataset.ip}
           `;
