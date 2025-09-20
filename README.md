@@ -1,49 +1,93 @@
-# Network Diagram App
+# Network Diagram Explorer
 
-This project is a simple network diagram application built using HTML and JavaScript. It visualizes a network consisting of various components such as firewalls, switches, hosts, virtual machines (VMs), and access points (APs).
+The Network Diagram Explorer is a client- and site-aware viewer for visualizing network topologies. It provides an interactive way to navigate from geographic areas, to clients, and finally to individual locations where firewall, switching, wireless, and virtualization assets are displayed.
 
 ## Project Structure
 
-The project has the following structure:
-
 ```
-network-diagram-app
+NetworkDiagram
 ├── src
-│   ├── index.html          # Main HTML document
-│   ├── main.js             # Main JavaScript logic
-│   ├── components          # Contains component definitions
-│   │   ├── Firewall.js     # Firewall component
-│   │   ├── Switch.js       # Switch component
-│   │   ├── Host.js         # Host component
-│   │   ├── VM.js           # Virtual Machine component
-│   │   └── AccessPoint.js   # Access Point component
-│   ├── data                # Contains network data
-│   │   └── networkData.js   # Network configuration data
-│   └── styles              # Contains CSS styles
-│       └── main.css        # Main stylesheet
-└── README.md               # Project documentation
+│   ├── components/             # Legacy component prototypes (not currently used by the explorer)
+│   ├── data/
+│   │   └── networkData.js      # Hierarchical data describing areas, clients, locations, and devices
+│   ├── index.html              # Application shell
+│   ├── main.js                 # Single-page application logic
+│   └── styles/
+│       └── main.css            # Styling for navigation and diagrams
+└── README.md
 ```
 
-## Setup Instructions
+## Getting Started
 
-1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Open `https://uraniumturtles.github.io/NetworkDiagram/src/index.html` in a web browser to view the network diagram.
+1. Clone or download the repository.
+2. Open `src/index.html` in a modern browser that supports ES modules (Chrome, Edge, Firefox, or Safari).
+3. Use the on-screen navigation to drill into areas, clients, and site diagrams.
 
-## Functionality
+No build tooling is required—the application runs as a static site.
 
-- The application renders a network diagram based on the defined components.
-- Each component (firewall, switch, host, VM, and access point) is represented visually.
-- The relationships between components are defined in `src/data/networkData.js`.
+## Data Model
 
-## Technologies Used
+All network details are defined in `src/data/networkData.js`. The structure is intentionally hierarchical so it can scale with additional regions, clients, and locations:
 
-- HTML
-- JavaScript
-- CSS
+```js
+{
+  areas: [
+    {
+      id: 'wichita',
+      name: 'Wichita',
+      description: 'Operations center overview',
+      clients: [
+        {
+          id: 'baxter-manufacturing',
+          name: 'Baxter Manufacturing',
+          summary: 'High-level description',
+          locations: [
+            {
+              id: 'baxter-hq',
+              name: 'Baxter Headquarters',
+              address: '123 Industrial Ave, Wichita, KS',
+              description: 'Site overview',
+              diagram: {
+                size: { width: 960, height: 580 },
+                firewalls: [ { id, name, model, ip, position } ],
+                switches: [ { ... } ],
+                hosts: [ { ..., vms: [ { id, name, os, ip, role } ] } ],
+                accessPoints: [ { ... } ],
+                links: [
+                  { from: { type: 'firewalls', id: 'fw-id' }, to: { type: 'switches', id: 'switch-id' } }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
 
-## Future Enhancements
+### Adding New Content
 
-- Add interactivity to the network diagram.
-- Implement additional features for managing network components.
-- Improve the styling and layout of the application.
+- **Areas**: Append a new object to the `areas` array. Provide a unique `id`, `name`, and `description`.
+- **Clients**: Within an area, add entries to the `clients` array. Each client should include a `summary` and a set of `locations`.
+- **Locations**: Supply an address, description, and a `diagram` block that lists devices by type.
+- **Devices**: Each device requires an `id`, `name`, optional metadata (`model`, `ip`), and a `position` object with `x`/`y` coordinates. Hosts may include a `vms` array to surface virtual machines in the UI.
+- **Links**: Describe connections between devices using device type keys (`firewalls`, `switches`, `hosts`, `accessPoints`). The explorer will render cabling between the device centers.
+
+## Features
+
+- Responsive navigation across areas, clients, and locations.
+- SVG-based diagrams generated entirely from declarative data.
+- Automatic legends, breadcrumbs, and back navigation.
+- Virtual machine panels summarizing host workloads.
+- Tooltips (via native SVG `<title>` elements) that expose model and IP details.
+
+## Extending the Explorer
+
+- Adjust styling or layout in `src/styles/main.css`.
+- Add new device types or metadata by extending the data model and the rendering helpers in `src/main.js`.
+- Integrate additional interactivity (such as modals or editing flows) by attaching event handlers after the diagram is rendered.
+
+## Browser Support
+
+The explorer targets evergreen browsers that support ES modules, template literals, and modern CSS. For legacy browser support, consider adding a build step that transpiles `main.js` and bundles assets.
