@@ -585,12 +585,12 @@ function buildDiagramSVG(diagramConfig) {
             return;
         }
 
-        linkSegments.push(`<line class="diagram-link" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" />`);
+        linkSegments.push(`<line class="diagram-link" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" role="presentation" />`);
     });
 
     return `
         <svg class="network-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Network diagram">
-            <g class="connections">${linkSegments.join('')}</g>
+            <g class="connections" aria-hidden="true">${linkSegments.join('')}</g>
             <g class="devices">${segments.join('')}</g>
         </svg>
     `;
@@ -656,4 +656,5 @@ function getSelectedLocation() {
 
     return client.locations.find(location => location.id === state.locationId) ?? null;
 }
+
 
