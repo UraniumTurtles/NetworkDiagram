@@ -545,7 +545,7 @@ function buildDiagramSVG(diagramConfig) {
             </g>
         `);
 
-        devicePositions[type].set(device.id, { ...device.position });
+        devicePositions[type].set(device.id, { x: device.position.x, y: device.position.y, width: dims.width, height: dims.height, shape: 'rect' });
     }
 
     function addEllipseDevice(type, device) {
@@ -568,13 +568,45 @@ function buildDiagramSVG(diagramConfig) {
             </g>
         `);
 
-        devicePositions[type].set(device.id, { ...device.position });
+        devicePositions[type].set(device.id, { x: device.position.x, y: device.position.y, rx: ellipseDimensions.rx, ry: ellipseDimensions.ry, shape: 'ellipse' });
     }
 
     (config.firewalls ?? []).forEach(device => addRectDevice('firewalls', device));
     (config.switches ?? []).forEach(device => addRectDevice('switches', device));
     (config.hosts ?? []).forEach(device => addRectDevice('hosts', device));
     (config.accessPoints ?? []).forEach(device => addEllipseDevice('accessPoints', device));
+
+    function resolveAnchorPoint(node, other) {
+        if (!node) {
+            return null;
+        }
+
+        if (!other) {
+            return { x: node.x, y: node.y };
+        }
+
+        const dx = other.x - node.x;
+        const dy = other.y - node.y;
+
+        if (node.shape === 'rect') {
+            if (Math.abs(dy) >= Math.abs(dx)) {
+                const direction = dy === 0 ? 1 : Math.sign(dy);
+                return { x: node.x, y: node.y + direction * (node.height / 2) };
+            }
+            const direction = dx === 0 ? 1 : Math.sign(dx);
+            return { x: node.x + direction * (node.width / 2), y: node.y };
+        }
+
+        if (node.shape === 'ellipse') {
+            const angle = Math.atan2(dy, dx);
+            return {
+                x: node.x + node.rx * Math.cos(angle),
+                y: node.y + node.ry * Math.sin(angle)
+            };
+        }
+
+        return { x: node.x, y: node.y };
+    }
 
     const linkSegments = [];
     (config.links ?? []).forEach(link => {
@@ -585,7 +617,14 @@ function buildDiagramSVG(diagramConfig) {
             return;
         }
 
-        linkSegments.push(`<line class="diagram-link" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" role="presentation" />`);
+        const fromAnchor = resolveAnchorPoint(from, to);
+        const toAnchor = resolveAnchorPoint(to, from);
+
+        if (!fromAnchor || !toAnchor) {
+            return;
+        }
+
+        linkSegments.push(`<line class="diagram-link" x1="${fromAnchor.x}" y1="${fromAnchor.y}" x2="${toAnchor.x}" y2="${toAnchor.y}" role="presentation" />`);
     });
 
     return `
@@ -656,5 +695,4 @@ function getSelectedLocation() {
 
     return client.locations.find(location => location.id === state.locationId) ?? null;
 }
-
 
