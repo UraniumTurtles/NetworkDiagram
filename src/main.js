@@ -25,13 +25,20 @@ const diagramDefaults = {
     links: []
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+function initializeApp() {
     if (!root) {
         console.error('Root container not found.');
         return;
     }
+
     renderView();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
 
 function renderView() {
     if (!root) {
@@ -72,24 +79,32 @@ function renderAreaSelection() {
     const grid = document.createElement('div');
     grid.className = 'button-grid';
 
-    networkData.areas.forEach(area => {
-        const clientCount = area.clients?.length ?? 0;
-        const option = createOptionCard({
-            title: area.name,
-            subtitle: area.description,
-            meta: `${clientCount} client${clientCount === 1 ? '' : 's'}`,
-            onClick: () => {
-                state.view = 'clients';
-                state.areaId = area.id;
-                state.clientId = null;
-                state.locationId = null;
-                renderView();
-            }
-        });
-        grid.appendChild(option);
-    });
+    const areas = Array.isArray(networkData?.areas) ? networkData.areas : [];
 
-    card.appendChild(grid);
+    if (areas.length === 0) {
+        const empty = document.createElement('p');
+        empty.textContent = 'No areas have been configured yet. Add markets to data/networkData.js to begin.';
+        card.appendChild(empty);
+    } else {
+        areas.forEach(area => {
+            const clientCount = area.clients?.length ?? 0;
+            const option = createOptionCard({
+                title: area.name,
+                subtitle: area.description,
+                meta: `${clientCount} client${clientCount === 1 ? '' : 's'}`,
+                onClick: () => {
+                    state.view = 'clients';
+                    state.areaId = area.id;
+                    state.clientId = null;
+                    state.locationId = null;
+                    renderView();
+                }
+            });
+            grid.appendChild(option);
+        });
+
+        card.appendChild(grid);
+    }
 
     root.appendChild(header);
     root.appendChild(card);
@@ -641,3 +656,4 @@ function getSelectedLocation() {
 
     return client.locations.find(location => location.id === state.locationId) ?? null;
 }
+
