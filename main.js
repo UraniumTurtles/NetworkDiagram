@@ -135,11 +135,27 @@ function renderClientSelection() {
     const grid = document.createElement('div');
     grid.className = 'button-grid';
 
+    const noResultsMsg = document.createElement('p');
+    noResultsMsg.textContent = 'No clients match your search.';
+    noResultsMsg.style.display = 'none';
+    noResultsMsg.className = 'no-results-message';
+
     if (!area.clients || area.clients.length === 0) {
         const empty = document.createElement('p');
         empty.textContent = 'No clients have been configured for this area yet.';
         card.appendChild(empty);
     } else {
+        // Add search input
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'search-container';
+
+        const searchInput = document.createElement('input');
+        searchInput.type = 'search';
+        searchInput.placeholder = 'Search clients...';
+        searchInput.className = 'search-input';
+        searchContainer.appendChild(searchInput);
+        card.appendChild(searchContainer);
+
         area.clients.forEach(client => {
             const locationCount = client.locations?.length ?? 0;
             const option = createOptionCard({
@@ -153,9 +169,30 @@ function renderClientSelection() {
                     renderView();
                 }
             });
+            option.dataset.searchText = `${client.name} ${client.summary}`.toLowerCase();
             grid.appendChild(option);
         });
+
         card.appendChild(grid);
+        card.appendChild(noResultsMsg);
+
+        // Add search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            grid.querySelectorAll('.option-card').forEach(option => {
+                const searchText = option.dataset.searchText || '';
+                if (searchText.includes(searchTerm)) {
+                    option.style.display = '';
+                    visibleCount++;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        });
     }
 
     root.appendChild(header);
@@ -201,11 +238,27 @@ function renderLocationSelection() {
     const grid = document.createElement('div');
     grid.className = 'button-grid';
 
+    const noResultsMsg = document.createElement('p');
+    noResultsMsg.textContent = 'No locations match your search.';
+    noResultsMsg.style.display = 'none';
+    noResultsMsg.className = 'no-results-message';
+
     if (!client.locations || client.locations.length === 0) {
         const empty = document.createElement('p');
         empty.textContent = 'No locations are configured for this client yet.';
         card.appendChild(empty);
     } else {
+        // Add search input
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'search-container';
+
+        const searchInput = document.createElement('input');
+        searchInput.type = 'search';
+        searchInput.placeholder = 'Search locations...';
+        searchInput.className = 'search-input';
+        searchContainer.appendChild(searchInput);
+        card.appendChild(searchContainer);
+
         client.locations.forEach(location => {
             const option = createOptionCard({
                 title: location.name,
@@ -217,9 +270,30 @@ function renderLocationSelection() {
                     renderView();
                 }
             });
+            option.dataset.searchText = `${location.name} ${location.description} ${location.address || ''}`.toLowerCase();
             grid.appendChild(option);
         });
+
         card.appendChild(grid);
+        card.appendChild(noResultsMsg);
+
+        // Add search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            grid.querySelectorAll('.option-card').forEach(option => {
+                const searchText = option.dataset.searchText || '';
+                if (searchText.includes(searchTerm)) {
+                    option.style.display = '';
+                    visibleCount++;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+        });
     }
 
     root.appendChild(header);
