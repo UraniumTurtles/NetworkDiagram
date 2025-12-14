@@ -344,19 +344,193 @@ body {
         position: relative;
         top: 0;
     }
+
+    .button-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }
 
+/* Tablet & small screens */
 @media (max-width: 680px) {
     .app-shell {
-        padding: 32px 16px 48px;
+        padding: 24px 16px 48px;
     }
 
     .view-header h1 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
+        letter-spacing: -0.01em;
+    }
+
+    .content-card h2 {
+        font-size: 1.3rem;
+    }
+
+    .content-card {
+        padding: 20px;
     }
 
     .option-card {
-        padding: 18px;
+        padding: 20px;
+    }
+
+    .button-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .breadcrumbs {
+        font-size: 0.85rem;
+    }
+
+    .back-button {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 100%;
+    }
+
+    .diagram-canvas {
+        padding: 16px;
+        overflow-x: auto;
+    }
+
+    .network-svg {
+        min-width: 600px;
+        max-height: none;
+    }
+
+    .diagram-header {
+        padding: 16px 20px 12px;
+    }
+
+    .diagram-legend {
+        padding: 12px 20px 16px;
+        gap: 8px;
+    }
+
+    .legend-item {
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .app-shell {
+        padding: 16px 12px 32px;
+    }
+
+    .view-header {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .view-header h1 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .view-header p {
+        font-size: 0.9rem;
+    }
+
+    .content-card {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .content-card h2 {
+        font-size: 1.2rem;
+    }
+
+    .option-card {
+        padding: 16px;
+        border-left-width: 3px;
+    }
+
+    .option-card strong {
+        font-size: 1rem;
+    }
+
+    .option-card p {
+        font-size: 0.9rem;
+    }
+
+    .breadcrumbs {
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+
+    .back-button {
+        padding: 12px 16px;
+        font-size: 0.8rem;
+    }
+
+    .search-input {
+        padding: 14px 16px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .diagram-canvas {
+        padding: 12px;
+    }
+
+    .diagram-header {
+        padding: 12px 16px 10px;
+    }
+
+    .diagram-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .diagram-legend {
+        padding: 10px 16px 12px;
+    }
+
+    .vm-panel h3 {
+        font-size: 1.1rem;
+    }
+
+    .vm-host {
+        padding: 12px;
+    }
+
+    .vm-list li {
+        font-size: 0.9rem;
+    }
+
+    .device-label {
+        font-size: 14px;
+    }
+
+    .device-meta {
+        font-size: 11px;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .option-card:hover {
+        transform: none;
+    }
+
+    .option-card:active {
+        transform: scale(0.98);
+        background: #fafafa;
+    }
+
+    .back-button:hover {
+        transform: none;
+    }
+
+    .back-button:active {
+        transform: scale(0.97);
+    }
+
+    .breadcrumbs button:hover {
+        text-decoration: none;
+    }
+
+    .breadcrumbs button:active {
+        opacity: 0.7;
     }
 }
 
