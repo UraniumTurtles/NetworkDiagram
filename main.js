@@ -9,6 +9,98 @@ const state = {
 
 const root = document.getElementById('root');
 
+// URL routing functions
+function parseUrlHash() {
+    const hash = window.location.hash.slice(1); // Remove leading #
+    if (!hash || hash === '/') {
+        return { view: 'areas', areaId: null, clientId: null, locationId: null };
+    }
+
+    const parts = hash.split('/').filter(Boolean);
+
+    if (parts.length === 1) {
+        // #/area-id
+        return { view: 'clients', areaId: parts[0], clientId: null, locationId: null };
+    } else if (parts.length === 2) {
+        // #/area-id/client-id
+        return { view: 'locations', areaId: parts[0], clientId: parts[1], locationId: null };
+    } else if (parts.length >= 3) {
+        // #/area-id/client-id/location-id
+        return { view: 'diagram', areaId: parts[0], clientId: parts[1], locationId: parts[2] };
+    }
+
+    return { view: 'areas', areaId: null, clientId: null, locationId: null };
+}
+
+function updateUrlHash() {
+    let hash = '';
+
+    if (state.view === 'areas') {
+        hash = '/';
+    } else if (state.view === 'clients' && state.areaId) {
+        hash = `/${state.areaId}`;
+    } else if (state.view === 'locations' && state.areaId && state.clientId) {
+        hash = `/${state.areaId}/${state.clientId}`;
+    } else if (state.view === 'diagram' && state.areaId && state.clientId && state.locationId) {
+        hash = `/${state.areaId}/${state.clientId}/${state.locationId}`;
+    }
+
+    if (window.location.hash !== '#' + hash) {
+        window.location.hash = hash;
+    }
+}
+
+function validateAndSetState(parsedState) {
+    // Validate that the IDs in the URL actually exist in the data
+    if (parsedState.view === 'areas') {
+        Object.assign(state, parsedState);
+        return true;
+    }
+
+    const area = networkData.areas.find(a => a.id === parsedState.areaId);
+    if (!area) {
+        // Invalid area ID, fallback to areas view
+        state.view = 'areas';
+        state.areaId = null;
+        state.clientId = null;
+        state.locationId = null;
+        return false;
+    }
+
+    if (parsedState.view === 'clients') {
+        Object.assign(state, parsedState);
+        return true;
+    }
+
+    const client = area.clients.find(c => c.id === parsedState.clientId);
+    if (!client) {
+        // Invalid client ID, fallback to clients view
+        state.view = 'clients';
+        state.areaId = parsedState.areaId;
+        state.clientId = null;
+        state.locationId = null;
+        return false;
+    }
+
+    if (parsedState.view === 'locations') {
+        Object.assign(state, parsedState);
+        return true;
+    }
+
+    const location = client.locations.find(l => l.id === parsedState.locationId);
+    if (!location) {
+        // Invalid location ID, fallback to locations view
+        state.view = 'locations';
+        state.areaId = parsedState.areaId;
+        state.clientId = parsedState.clientId;
+        state.locationId = null;
+        return false;
+    }
+
+    Object.assign(state, parsedState);
+    return true;
+}
+
 const legendConfig = [
     { label: 'Firewall', color: 'rgba(255, 166, 58, 0.45)' },
     { label: 'Switch', color: 'rgba(47, 111, 237, 0.35)' },
@@ -31,6 +123,17 @@ function initializeApp() {
         return;
     }
 
+    // Initialize state from URL hash
+    const parsedState = parseUrlHash();
+    validateAndSetState(parsedState);
+
+    // Listen for browser back/forward navigation
+    window.addEventListener('hashchange', () => {
+        const parsedState = parseUrlHash();
+        validateAndSetState(parsedState);
+        renderView();
+    });
+
     renderView();
 }
 
@@ -46,6 +149,9 @@ function renderView() {
     }
 
     root.innerHTML = '';
+
+    // Update URL hash to match current state
+    updateUrlHash();
 
     switch (state.view) {
         case 'areas':
