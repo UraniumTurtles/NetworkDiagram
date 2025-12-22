@@ -13,6 +13,7 @@ import heartlandCreditUnion from './clients/heartland-credit-union.js';
 import riverwalkHospitality from './clients/riverwalk-hospitality.js';
 import gulfCoastShipping from './clients/gulf-coast-shipping.js';
 import metroplexRetail from './clients/metroplex-retail.js';
+import medicalProviderResources from './clients/medical-provider-resources.js';
 
 // Create a map of client ID to client data for easy lookup
 const clientsMap = {
@@ -23,7 +24,8 @@ const clientsMap = {
     'heartland-credit-union': heartlandCreditUnion,
     'riverwalk-hospitality': riverwalkHospitality,
     'gulf-coast-shipping': gulfCoastShipping,
-    'metroplex-retail': metroplexRetail
+    'metroplex-retail': metroplexRetail,
+    'medical-provider-resources': medicalProviderResources
 };
 
 // Assemble the areas with their clients
