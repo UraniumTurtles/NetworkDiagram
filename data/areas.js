@@ -6,7 +6,7 @@ export default [
         id: 'wichita',
         name: 'Wichita',
         description: 'Manufacturing and healthcare clients served from the Wichita operations center.',
-        clientIds: ['baxter-manufacturing', 'prairie-health', 'xpress-logistics']
+        clientIds: ['baxter-manufacturing', 'prairie-health', 'xpress-logistics', 'medical-provider-resources']
     },
     {
         id: 'denver',
