@@ -495,9 +495,7 @@ function renderDiagram() {
     diagramLayout.appendChild(diagramCard);
 
     const vmPanel = createVmPanel(location.diagram?.hosts ?? []);
-    if (vmPanel) {
-        diagramLayout.appendChild(vmPanel);
-    }
+    diagramLayout.appendChild(vmPanel);
 
     root.appendChild(header);
     root.appendChild(summaryCard);
@@ -624,16 +622,20 @@ function createLegend() {
 }
 
 function createVmPanel(hosts) {
-    if (!hosts || hosts.length === 0) {
-        return null;
-    }
-
     const panel = document.createElement('div');
     panel.className = 'content-card vm-panel';
 
     const heading = document.createElement('h3');
     heading.textContent = 'Virtual Machines';
     panel.appendChild(heading);
+
+    if (!hosts || hosts.length === 0) {
+        const placeholder = document.createElement('p');
+        placeholder.className = 'vm-placeholder';
+        placeholder.textContent = 'No hypervisor hosts configured for this location.';
+        panel.appendChild(placeholder);
+        return panel;
+    }
 
     hosts.forEach(host => {
         const hostContainer = document.createElement('div');
@@ -715,12 +717,14 @@ function buildDiagramSVG(diagramConfig) {
         const y = device.position.y - dims.height / 2;
         const labelY = device.position.y + 6;
         const metaY = device.position.y + dims.height / 2 + 18;
-        const meta = [device.model, device.ip].filter(Boolean).join(' • ');
+        const meta = [device.model, device.serial, device.ip].filter(Boolean).join(' • ');
+
+        const maxTextWidth = dims.width - 10; // 5px padding on each side
 
         segments.push(`
             <g class="device-group" data-type="${type}" data-id="${escapeHtml(device.id)}">
                 <rect class="device ${classMap[type]}" x="${x}" y="${y}" width="${dims.width}" height="${dims.height}" rx="10" ry="10"></rect>
-                <text class="device-label" x="${device.position.x}" y="${labelY}" text-anchor="middle">${escapeHtml(device.name)}</text>
+                <text class="device-label" x="${device.position.x}" y="${labelY}" text-anchor="middle" textLength="${maxTextWidth}" lengthAdjust="spacingAndGlyphs">${escapeHtml(device.name)}</text>
                 ${meta ? `<text class="device-meta" x="${device.position.x}" y="${metaY}" text-anchor="middle">${escapeHtml(meta)}</text>` : ''}
             </g>
         `);
@@ -735,7 +739,7 @@ function buildDiagramSVG(diagramConfig) {
 
         const labelY = device.position.y + 6;
         const metaY = device.position.y + ellipseDimensions.ry + 20;
-        const meta = [device.model, device.ip].filter(Boolean).join(' • ');
+        const meta = [device.model, device.serial, device.ip].filter(Boolean).join(' • ');
 
         segments.push(`
             <g class="device-group" data-type="${type}" data-id="${escapeHtml(device.id)}">
@@ -802,6 +806,35 @@ function buildDiagramSVG(diagramConfig) {
         }
 
         linkSegments.push(`<line class="diagram-link" x1="${fromAnchor.x}" y1="${fromAnchor.y}" x2="${toAnchor.x}" y2="${toAnchor.y}" role="presentation" />`);
+
+        // Add port labels for switches and firewalls
+        const showFromPort = (link.from?.type === 'switches' || link.from?.type === 'firewalls') && link.from?.port;
+        const showToPort = (link.to?.type === 'switches' || link.to?.type === 'firewalls') && link.to?.port;
+
+        if (showFromPort || showToPort) {
+            const midX = (fromAnchor.x + toAnchor.x) / 2;
+            const midY = (fromAnchor.y + toAnchor.y) / 2;
+            const dx = toAnchor.x - fromAnchor.x;
+            const dy = toAnchor.y - fromAnchor.y;
+            const angle = Math.atan2(dy, dx);
+
+            // Offset distance from the line
+            const offsetDist = 8;
+            const offsetX = -Math.sin(angle) * offsetDist;
+            const offsetY = Math.cos(angle) * offsetDist;
+
+            if (showFromPort) {
+                const fromLabelX = fromAnchor.x + (midX - fromAnchor.x) * 0.3 + offsetX;
+                const fromLabelY = fromAnchor.y + (midY - fromAnchor.y) * 0.3 + offsetY;
+                linkSegments.push(`<text class="port-label" x="${fromLabelX}" y="${fromLabelY}" text-anchor="middle">${escapeHtml(link.from.port)}</text>`);
+            }
+
+            if (showToPort) {
+                const toLabelX = toAnchor.x + (midX - toAnchor.x) * 0.3 + offsetX;
+                const toLabelY = toAnchor.y + (midY - toAnchor.y) * 0.3 + offsetY;
+                linkSegments.push(`<text class="port-label" x="${toLabelX}" y="${toLabelY}" text-anchor="middle">${escapeHtml(link.to.port)}</text>`);
+            }
+        }
     });
 
     return `

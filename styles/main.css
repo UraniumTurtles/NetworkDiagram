@@ -259,6 +259,15 @@ body {
     visibility: hidden;
 }
 
+.port-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--color-primary);
+    pointer-events: none;
+    background: white;
+}
+
 /* Device tooltip */
 .device-tooltip {
     position: absolute;
@@ -342,6 +351,14 @@ body {
 .vm-list li {
     font-size: 0.95rem;
     color: var(--color-text);
+}
+
+.vm-placeholder {
+    color: var(--color-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 24px;
+    margin: 0;
 }
 
 .back-button {

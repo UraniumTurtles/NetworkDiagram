@@ -364,6 +364,11 @@
                 </div>
             </div>
 
+            <div class="form-group" id="device-serial-section">
+                <label>Serial Number <span class="optional">(optional)</span></label>
+                <input type="text" id="device-serial" placeholder="FGT60F1234567890" />
+            </div>
+
             <div class="grid-2">
                 <div class="form-group">
                     <label>Position X</label>
@@ -418,7 +423,8 @@
 
                     <strong>Step 3: (Optional) Add connections</strong><br>
                     • If this device connects to other devices, add link objects to the <code>links</code> array<br>
-                    • Example: <code>{ from: { type: '<span id="link-type">[device-type]</span>', id: '<span id="link-id">[device-id]</span>' }, to: { type: 'switches', id: 'switch-1' } }</code><br><br>
+                    • Example: <code>{ from: { type: '<span id="link-type">[device-type]</span>', id: '<span id="link-id">[device-id]</span>', port: 'Port1' }, to: { type: 'switches', id: 'switch-1', port: 'Port2' } }</code><br>
+                    • Port labels are optional and only displayed for switches and firewalls<br><br>
 
                     <strong>Step 4: Test</strong><br>
                     • Open <code>index.html</code> in your browser<br>
@@ -503,6 +509,16 @@
                 <button class="btn btn-secondary" onclick="addDevice('host')" style="margin-top: 10px;">Add Host</button>
             </div>
 
+            <h3 style="margin-top: 30px; color: #006680;">Connections</h3>
+
+            <div class="form-group">
+                <label>Links</label>
+                <div id="links-list" class="device-list">
+                    <p class="help-text" style="margin: 0; text-align: center;">No links added yet. Click "Add Link" to add one.</p>
+                </div>
+                <button class="btn btn-secondary" onclick="addLink()" style="margin-top: 10px;">Add Link</button>
+            </div>
+
             <div class="btn-group">
                 <button class="btn btn-primary" onclick="generateLocationCode()">Generate Code</button>
                 <button class="btn btn-secondary" onclick="resetLocationForm()">Reset Form</button>
@@ -584,7 +600,18 @@
                         <label>IP Address</label>
                         <input type="text" class="device-ip" placeholder="e.g., 10.0.0.1" />
                     </div>
-                </div>
+                </div>`;
+
+            // Add serial number field for non-host devices
+            if (type !== 'host') {
+                deviceHTML += `
+                <div style="margin-top: 10px;">
+                    <label>Serial Number <span class="optional">(optional)</span></label>
+                    <input type="text" class="device-serial" placeholder="e.g., FGT60F1234567890" />
+                </div>`;
+            }
+
+            deviceHTML += `
                 <div class="grid-2" style="margin-top: 10px;">
                     <div>
                         <label>Position X</label>
@@ -612,6 +639,77 @@
 
         function removeDevice(btn) {
             btn.closest('.device-item').remove();
+        }
+
+        // Link counter
+        let linkCounter = 0;
+
+        function addLink() {
+            linkCounter++;
+            const list = document.getElementById('links-list');
+
+            // Remove help text if this is the first link
+            const helpText = list.querySelector('.help-text');
+            if (helpText) {
+                helpText.remove();
+            }
+
+            const linkDiv = document.createElement('div');
+            linkDiv.className = 'device-item';
+            linkDiv.dataset.linkId = linkCounter;
+
+            linkDiv.innerHTML = `
+                <div class="device-header">
+                    <h4>Link ${linkCounter}</h4>
+                    <button class="btn btn-danger" onclick="removeDevice(this)">Remove</button>
+                </div>
+                <div style="margin-top: 10px;">
+                    <strong>From Device:</strong>
+                </div>
+                <div class="grid-2" style="margin-top: 5px;">
+                    <div>
+                        <label>Type</label>
+                        <select class="link-from-type">
+                            <option value="firewalls">Firewall</option>
+                            <option value="switches">Switch</option>
+                            <option value="accessPoints">Access Point</option>
+                            <option value="hosts">Host</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Device ID</label>
+                        <input type="text" class="link-from-id" placeholder="device-id" />
+                    </div>
+                </div>
+                <div style="margin-top: 5px;">
+                    <label>Port <span style="font-weight: normal; color: #999;">(optional, for firewalls/switches only)</span></label>
+                    <input type="text" class="link-from-port" placeholder="Port1" />
+                </div>
+                <div style="margin-top: 15px;">
+                    <strong>To Device:</strong>
+                </div>
+                <div class="grid-2" style="margin-top: 5px;">
+                    <div>
+                        <label>Type</label>
+                        <select class="link-to-type">
+                            <option value="firewalls">Firewall</option>
+                            <option value="switches">Switch</option>
+                            <option value="accessPoints">Access Point</option>
+                            <option value="hosts">Host</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Device ID</label>
+                        <input type="text" class="link-to-id" placeholder="device-id" />
+                    </div>
+                </div>
+                <div style="margin-top: 5px;">
+                    <label>Port <span style="font-weight: normal; color: #999;">(optional, for firewalls/switches only)</span></label>
+                    <input type="text" class="link-to-port" placeholder="Port2" />
+                </div>
+            `;
+
+            list.appendChild(linkDiv);
         }
 
         function capitalize(str) {
@@ -697,15 +795,53 @@
             if (accessPoints.length > 0) code += `\n        accessPoints: ${JSON.stringify(accessPoints, null, 12).replace(/^/gm, '        ').trim()},`;
             if (hosts.length > 0) code += `\n        hosts: ${JSON.stringify(hosts, null, 12).replace(/^/gm, '        ').trim()},`;
 
-            code += `\n        links: [
-            // Add connection links here, e.g.:
-            // { from: { type: 'firewalls', id: 'firewall-1' }, to: { type: 'switches', id: 'switch-1' } }
-        ]
-    }
+            const links = collectLinks();
+            if (links.length > 0) {
+                code += `\n        links: ${JSON.stringify(links, null, 12).replace(/^/gm, '        ').trim()}`;
+            } else {
+                code += `\n        links: []`;
+            }
+
+            code += `\n    }
 }`;
 
             document.getElementById('location-code').textContent = code;
             document.getElementById('location-output').style.display = 'block';
+        }
+
+        function collectLinks() {
+            const list = document.getElementById('links-list');
+            const links = [];
+
+            list.querySelectorAll('.device-item').forEach(item => {
+                const fromType = item.querySelector('.link-from-type').value;
+                const fromId = item.querySelector('.link-from-id').value.trim();
+                const fromPort = item.querySelector('.link-from-port').value.trim();
+                const toType = item.querySelector('.link-to-type').value;
+                const toId = item.querySelector('.link-to-id').value.trim();
+                const toPort = item.querySelector('.link-to-port').value.trim();
+
+                if (!fromId || !toId) {
+                    return; // Skip incomplete links
+                }
+
+                const link = {
+                    from: { type: fromType, id: fromId },
+                    to: { type: toType, id: toId }
+                };
+
+                // Add port for firewalls and switches only
+                if ((fromType === 'firewalls' || fromType === 'switches') && fromPort) {
+                    link.from.port = fromPort;
+                }
+                if ((toType === 'firewalls' || toType === 'switches') && toPort) {
+                    link.to.port = toPort;
+                }
+
+                links.push(link);
+            });
+
+            return links;
         }
 
         function collectDevices(listId, arrayName) {
@@ -723,6 +859,15 @@
                         y: parseInt(item.querySelector('.device-y').value)
                     }
                 };
+
+                // Add serial number for non-host devices
+                const serialField = item.querySelector('.device-serial');
+                if (serialField) {
+                    const serial = serialField.value.trim();
+                    if (serial) {
+                        device.serial = serial;
+                    }
+                }
 
                 // Add VMs for hosts
                 const vmsField = item.querySelector('.device-vms');
@@ -766,11 +911,13 @@
             document.getElementById('switches-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No switches added yet. Click "Add Switch" to add one.</p>';
             document.getElementById('access-points-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No access points added yet. Click "Add Access Point" to add one.</p>';
             document.getElementById('hosts-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No hosts added yet. Click "Add Host" to add one.</p>';
+            document.getElementById('links-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No links added yet. Click "Add Link" to add one.</p>';
 
             deviceCounters.firewall = 0;
             deviceCounters.switch = 0;
             deviceCounters.accesspoint = 0;
             deviceCounters.host = 0;
+            linkCounter = 0;
 
             document.getElementById('location-output').style.display = 'none';
         }
@@ -785,37 +932,55 @@
         // Device tab functionality
         document.getElementById('device-type').addEventListener('change', function() {
             const vmsSection = document.getElementById('device-vms-section');
+            const serialSection = document.getElementById('device-serial-section');
+            const serialField = document.getElementById('device-serial');
+
             if (this.value === 'host') {
                 vmsSection.style.display = 'block';
+                serialSection.style.display = 'none';
             } else {
                 vmsSection.style.display = 'none';
+                serialSection.style.display = 'block';
             }
 
-            // Update placeholder based on device type
+            // Update placeholder and position based on device type
             const idField = document.getElementById('device-id');
             const nameField = document.getElementById('device-name');
             const modelField = document.getElementById('device-model');
+            const posXField = document.getElementById('device-pos-x');
+            const posYField = document.getElementById('device-pos-y');
 
             switch(this.value) {
                 case 'firewall':
                     idField.placeholder = 'firewall-2';
                     nameField.placeholder = 'Main Firewall';
                     modelField.placeholder = 'FortiGate 60F';
+                    serialField.placeholder = 'FGT60F1234567890';
+                    posXField.value = '480';
+                    posYField.value = '100';
                     break;
                 case 'switch':
                     idField.placeholder = 'switch-2';
                     nameField.placeholder = 'Core Switch';
                     modelField.placeholder = 'FortiSwitch 124F';
+                    serialField.placeholder = 'FS124F1234567890';
+                    posXField.value = '480';
+                    posYField.value = '250';
                     break;
                 case 'accesspoint':
                     idField.placeholder = 'ap-2';
                     nameField.placeholder = 'Office AP';
                     modelField.placeholder = 'FortiAP 231F';
+                    serialField.placeholder = 'FAP231F1234567890';
+                    posXField.value = '700';
+                    posYField.value = '250';
                     break;
                 case 'host':
                     idField.placeholder = 'host-2';
                     nameField.placeholder = 'Hypervisor Host';
                     modelField.placeholder = 'Dell PowerEdge R640';
+                    posXField.value = '480';
+                    posYField.value = '400';
                     break;
             }
         });
@@ -826,6 +991,7 @@
             const name = document.getElementById('device-name').value;
             const model = document.getElementById('device-model').value;
             const ip = document.getElementById('device-ip').value;
+            const serial = document.getElementById('device-serial').value;
             const x = document.getElementById('device-pos-x').value;
             const y = document.getElementById('device-pos-y').value;
 
@@ -841,6 +1007,7 @@
 
             if (model) device.model = model;
             if (ip) device.ip = ip;
+            if (serial && type !== 'host') device.serial = serial;
 
             device.position = {
                 x: parseInt(x),
@@ -888,10 +1055,13 @@
             document.getElementById('device-name').value = '';
             document.getElementById('device-model').value = '';
             document.getElementById('device-ip').value = '';
+            document.getElementById('device-serial').value = '';
+            // Firewall default position
             document.getElementById('device-pos-x').value = '480';
             document.getElementById('device-pos-y').value = '100';
             document.getElementById('device-vms').value = '';
             document.getElementById('device-vms-section').style.display = 'none';
+            document.getElementById('device-serial-section').style.display = 'block';
             document.getElementById('device-output').style.display = 'none';
         }
     </script>
