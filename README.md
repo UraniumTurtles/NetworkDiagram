@@ -3,6 +3,7 @@
 The Network Diagram Explorer is a scalable, client- and site-aware viewer for MSPs to visualize network topologies. It provides an interactive way to navigate from geographic areas, to clients, and finally to individual locations where firewall, switching, wireless, and virtualization assets are displayed.
 
 **New Features:**
+- 🔗 **QR Code / Direct URL Routing** - Deep links to specific sites for instant access
 - 🔍 **Search functionality** - Quickly find clients and locations
 - 📁 **Modular data structure** - Individual files per client for easier maintenance
 - 📈 **Scalable architecture** - Designed to handle 100+ clients efficiently
@@ -165,6 +166,29 @@ locations: [
   - Valid types: `'firewalls'`, `'switches'`, `'hosts'`, `'accessPoints'`
 
 ## Features
+
+### QR Code & Direct URL Routing
+- **Deep linking** - Navigate directly to any area, client, or location diagram via URL
+- **QR code friendly** - Generate QR codes for equipment racks that link directly to site diagrams
+- **Shareable URLs** - Bookmark or share links to specific network diagrams
+- **Smart fallback** - Invalid URLs gracefully redirect to the nearest valid view
+- **Browser navigation** - Full support for browser back/forward buttons
+
+**URL Pattern:**
+```
+# Direct to specific location diagram
+https://your-domain.com/#/area-id/client-id/location-id
+
+# Examples:
+https://your-domain.com/#/wichita/baxter-manufacturing/baxter-hq
+https://your-domain.com/#/wichita/baxter-manufacturing/baxter-warehouse
+
+# Partial URLs also work:
+https://your-domain.com/#/wichita                      # All clients in Wichita
+https://your-domain.com/#/wichita/baxter-manufacturing  # All Baxter locations
+```
+
+See [QR_CODE_EXAMPLES.md](QR_CODE_EXAMPLES.md) for complete list of valid URLs for all clients and locations.
 
 ### Navigation & Search
 - **Hierarchical navigation** - Areas → Clients → Locations → Network Diagrams
