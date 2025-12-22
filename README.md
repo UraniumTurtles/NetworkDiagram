@@ -5,6 +5,8 @@ The Network Diagram Explorer is a scalable, client- and site-aware viewer for MS
 **New Features:**
 - 🔗 **QR Code / Direct URL Routing** - Deep links to specific sites for instant access
 - 🔍 **Search functionality** - Quickly find clients and locations
+- 📱 **Mobile-optimized tooltips** - Clean device info on hover (desktop) or tap (mobile)
+- 🛠️ **Admin helper tool** - Visual form to generate new client/location configurations
 - 📁 **Modular data structure** - Individual files per client for easier maintenance
 - 📈 **Scalable architecture** - Designed to handle 100+ clients efficiently
 
@@ -23,12 +25,14 @@ NetworkDiagram
 │       ├── heartland-credit-union.js
 │       ├── riverwalk-hospitality.js
 │       ├── gulf-coast-shipping.js
-│       └── metroplex-retail.js
+│       ├── metroplex-retail.js
+│       └── medical-provider-resources.js
 ├── src/
 │   └── components/                 # Legacy component prototypes (not currently used)
 ├── styles/
 │   └── main.css                    # Styling for navigation and diagrams
 ├── index.html                      # Application entry point
+├── admin.html                      # Admin helper tool for generating configs
 ├── main.js                         # Single-page application logic
 └── README.md
 ```
@@ -101,7 +105,21 @@ export default {
 
 ## Adding New Content
 
-### Adding a New Client
+### Using the Admin Helper Tool (Recommended)
+
+The easiest way to add new clients and locations is to use the **Admin Helper Tool**:
+
+1. Open `admin.html` in your browser
+2. Fill out the form for a new client or location
+3. Click "Generate Code"
+4. Copy the generated code and paste it into the appropriate file
+5. Follow the on-screen instructions for where to save it
+
+The admin helper automatically generates properly formatted configuration code with device positioning, making it much faster than manual editing.
+
+### Manual Method
+
+#### Adding a New Client
 
 1. **Create a new client file** in `data/clients/`:
    ```bash
@@ -141,7 +159,7 @@ export default {
    }
    ```
 
-### Adding a New Location
+#### Adding a New Location
 
 Simply add a new location object to the `locations` array in the client's file:
 
@@ -201,7 +219,8 @@ See [QR_CODE_EXAMPLES.md](QR_CODE_EXAMPLES.md) for complete list of valid URLs f
 - **Smart connection routing** - Automatic line routing to device edges
 - **Device legends** - Color-coded legends for different device types
 - **Virtual machine panels** - Detailed VM inventory for each hypervisor host
-- **Interactive tooltips** - Native SVG tooltips showing device details (model, IP)
+- **Interactive tooltips** - Popup tooltips on hover (desktop) or tap (mobile) showing device model and IP
+- **Mobile-optimized** - Clean, uncluttered diagrams with information available on-demand
 
 ### Architecture
 - **Modular data structure** - Individual files per client for easier maintenance

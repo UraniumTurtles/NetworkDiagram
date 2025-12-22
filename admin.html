@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Network Diagram - Admin Helper</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #006680;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #006680;
+            margin-top: 0;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #8DC63F;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        label .optional {
+            font-weight: normal;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .device-list {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            background: #fafafa;
+            margin-top: 10px;
+        }
+
+        .device-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .device-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .device-header h4 {
+            margin: 0;
+            color: #006680;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #006680;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #004d5c;
+        }
+
+        .btn-secondary {
+            background: #8DC63F;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7ab62f;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .output-section {
+            background: #2d2d2d;
+            color: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .output-section pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #8DC63F;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .copy-btn:hover {
+            background: #7ab62f;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #006680;
+            border-bottom-color: #8DC63F;
+        }
+
+        .tab-btn:hover {
+            color: #006680;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Network Diagram Admin Helper</h1>
+    <p class="subtitle">Generate configuration code for new clients and locations</p>
+
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="client">New Client</button>
+        <button class="tab-btn" data-tab="location">New Location</button>
+    </div>
+
+    <!-- CLIENT TAB -->
+    <div id="client-tab" class="tab-content active">
+        <div class="form-section">
+            <h2>Client Information</h2>
+
+            <div class="form-group">
+                <label>Area <span class="optional">(where this client belongs)</span></label>
+                <select id="client-area">
+                    <option value="">Select an area...</option>
+                    <option value="midwest">Midwest</option>
+                    <option value="southwest">Southwest</option>
+                    <option value="southeast">Southeast</option>
+                    <option value="northeast">Northeast</option>
+                    <option value="pacificnorthwest">Pacific Northwest</option>
+                    <option value="texas">Texas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Client ID <span class="optional">(lowercase, no spaces, e.g., "acme-corp")</span></label>
+                <input type="text" id="client-id" placeholder="acme-corp" />
+            </div>
+
+            <div class="form-group">
+                <label>Client Name</label>
+                <input type="text" id="client-name" placeholder="ACME Corporation" />
+            </div>
+
+            <div class="form-group">
+                <label>Summary <span class="optional">(brief description)</span></label>
+                <textarea id="client-summary" placeholder="Enterprise manufacturing and distribution"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateClientCode()">Generate Code</button>
+                <button class="btn btn-secondary" onclick="resetClientForm()">Reset Form</button>
+            </div>
+
+            <div id="client-output" style="display: none;">
+                <div class="output-section">
+                    <button class="copy-btn" onclick="copyToClipboard('client-code')">Copy Code</button>
+                    <pre id="client-code"></pre>
+                </div>
+                <div class="help-text" style="margin-top: 15px;">
+                    <strong>Instructions:</strong><br>
+                    1. Copy the generated code above<br>
+                    2. Open the file <code>data/clients/[client-id].js</code> (create it if it doesn't exist)<br>
+                    3. Paste the code and save<br>
+                    4. Add this client to the appropriate area in <code>data/areas.js</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCATION TAB -->
+    <div id="location-tab" class="tab-content">
+        <div class="form-section">
+            <h2>Location Information</h2>
+
+            <div class="form-group">
+                <label>Location ID <span class="optional">(lowercase, no spaces, e.g., "headquarters")</span></label>
+                <input type="text" id="location-id" placeholder="headquarters" />
+            </div>
+
+            <div class="form-group">
+                <label>Location Name</label>
+                <input type="text" id="location-name" placeholder="Headquarters" />
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="location-description" placeholder="Primary data center and corporate offices"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Address <span class="optional">(optional)</span></label>
+                <input type="text" id="location-address" placeholder="123 Main St, City, ST 12345" />
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Network Diagram</h2>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Canvas Width</label>
+                    <input type="number" id="diagram-width" value="960" />
+                </div>
+                <div class="form-group">
+                    <label>Canvas Height</label>
+                    <input type="number" id="diagram-height" value="560" />
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #006680;">Devices</h3>
+
+            <div class="form-group">
+                <label>Firewalls</label>
+                <div id="firewalls-list" class="device-list"></div>
+                <button class="btn btn-secondary" onclick="addDevice('firewall')" style="margin-top: 10px;">Add Firewall</button>
+            </div>
+
+            <div class="form-group">
+                <label>Switches</label>
+                <div id="switches-list" class="device-list"></div>
+                <button class="btn btn-secondary" onclick="addDevice('switch')" style="margin-top: 10px;">Add Switch</button>
+            </div>
+
+            <div class="form-group">
+                <label>Access Points</label>
+                <div id="access-points-list" class="device-list"></div>
+                <button class="btn btn-secondary" onclick="addDevice('accesspoint')" style="margin-top: 10px;">Add Access Point</button>
+            </div>
+
+            <div class="form-group">
+                <label>Hypervisor Hosts</label>
+                <div id="hosts-list" class="device-list"></div>
+                <button class="btn btn-secondary" onclick="addDevice('host')" style="margin-top: 10px;">Add Host</button>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateLocationCode()">Generate Code</button>
+                <button class="btn btn-secondary" onclick="resetLocationForm()">Reset Form</button>
+            </div>
+
+            <div id="location-output" style="display: none;">
+                <div class="output-section">
+                    <button class="copy-btn" onclick="copyToClipboard('location-code')">Copy Code</button>
+                    <pre id="location-code"></pre>
+                </div>
+                <div class="help-text" style="margin-top: 15px;">
+                    <strong>Instructions:</strong><br>
+                    1. Copy the generated code above<br>
+                    2. Add this location object to the <code>locations</code> array in the appropriate client file<br>
+                    3. You may need to adjust device positions and add connection links manually
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
+            });
+        });
+
+        // Device counters
+        const deviceCounters = {
+            firewall: 0,
+            switch: 0,
+            accesspoint: 0,
+            host: 0
+        };
+
+        function addDevice(type) {
+            const counter = ++deviceCounters[type];
+            const listId = type === 'accesspoint' ? 'access-points-list' : type === 'host' ? 'hosts-list' : `${type}s-list`;
+            const list = document.getElementById(listId);
+
+            const deviceDiv = document.createElement('div');
+            deviceDiv.className = 'device-item';
+            deviceDiv.dataset.type = type;
+            deviceDiv.dataset.index = counter;
+
+            let deviceHTML = `
+                <div class="device-header">
+                    <h4>${capitalize(type)} ${counter}</h4>
+                    <button class="btn btn-danger" onclick="removeDevice(this)">Remove</button>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <label>ID</label>
+                        <input type="text" class="device-id" placeholder="${type}-${counter}" value="${type}-${counter}" />
+                    </div>
+                    <div>
+                        <label>Name</label>
+                        <input type="text" class="device-name" placeholder="${capitalize(type)} ${counter}" />
+                    </div>
+                </div>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div>
+                        <label>Model</label>
+                        <input type="text" class="device-model" placeholder="e.g., FortiGate 60F" />
+                    </div>
+                    <div>
+                        <label>IP Address</label>
+                        <input type="text" class="device-ip" placeholder="e.g., 10.0.0.1" />
+                    </div>
+                </div>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div>
+                        <label>Position X</label>
+                        <input type="number" class="device-x" placeholder="480" value="${480 + (counter - 1) * 100}" />
+                    </div>
+                    <div>
+                        <label>Position Y</label>
+                        <input type="number" class="device-y" placeholder="100" value="${100 + (counter - 1) * 100}" />
+                    </div>
+                </div>
+            `;
+
+            if (type === 'host') {
+                deviceHTML += `
+                    <div style="margin-top: 10px;">
+                        <label>Virtual Machines (JSON array - optional)</label>
+                        <textarea class="device-vms" placeholder='[{"name": "DC1", "role": "Domain Controller", "os": "Windows Server 2022", "ip": "10.0.0.10"}]'></textarea>
+                    </div>
+                `;
+            }
+
+            deviceDiv.innerHTML = deviceHTML;
+            list.appendChild(deviceDiv);
+        }
+
+        function removeDevice(btn) {
+            btn.closest('.device-item').remove();
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function generateClientCode() {
+            const area = document.getElementById('client-area').value;
+            const id = document.getElementById('client-id').value;
+            const name = document.getElementById('client-name').value;
+            const summary = document.getElementById('client-summary').value;
+
+            if (!area || !id || !name) {
+                alert('Please fill in Area, Client ID, and Client Name');
+                return;
+            }
+
+            const code = `export default {
+    id: '${id}',
+    name: '${name}',
+    summary: '${summary}',
+    locations: [
+        // Add locations here
+    ]
+};`;
+
+            document.getElementById('client-code').textContent = code;
+            document.getElementById('client-output').style.display = 'block';
+        }
+
+        function generateLocationCode() {
+            const id = document.getElementById('location-id').value;
+            const name = document.getElementById('location-name').value;
+            const description = document.getElementById('location-description').value;
+            const address = document.getElementById('location-address').value;
+            const width = document.getElementById('diagram-width').value;
+            const height = document.getElementById('diagram-height').value;
+
+            if (!id || !name) {
+                alert('Please fill in Location ID and Name');
+                return;
+            }
+
+            const firewalls = collectDevices('firewalls-list', 'firewalls');
+            const switches = collectDevices('switches-list', 'switches');
+            const accessPoints = collectDevices('access-points-list', 'accessPoints');
+            const hosts = collectDevices('hosts-list', 'hosts');
+
+            let code = `{
+    id: '${id}',
+    name: '${name}',
+    description: '${description}',`;
+
+            if (address) {
+                code += `\n    address: '${address}',`;
+            }
+
+            code += `
+    diagram: {
+        size: { width: ${width}, height: ${height} },`;
+
+            if (firewalls.length > 0) code += `\n        firewalls: ${JSON.stringify(firewalls, null, 12).replace(/^/gm, '        ').trim()},`;
+            if (switches.length > 0) code += `\n        switches: ${JSON.stringify(switches, null, 12).replace(/^/gm, '        ').trim()},`;
+            if (accessPoints.length > 0) code += `\n        accessPoints: ${JSON.stringify(accessPoints, null, 12).replace(/^/gm, '        ').trim()},`;
+            if (hosts.length > 0) code += `\n        hosts: ${JSON.stringify(hosts, null, 12).replace(/^/gm, '        ').trim()},`;
+
+            code += `\n        links: [
+            // Add connection links here, e.g.:
+            // { from: { type: 'firewalls', id: 'firewall-1' }, to: { type: 'switches', id: 'switch-1' } }
+        ]
+    }
+}`;
+
+            document.getElementById('location-code').textContent = code;
+            document.getElementById('location-output').style.display = 'block';
+        }
+
+        function collectDevices(listId, arrayName) {
+            const list = document.getElementById(listId);
+            const devices = [];
+
+            list.querySelectorAll('.device-item').forEach(item => {
+                const device = {
+                    id: item.querySelector('.device-id').value,
+                    name: item.querySelector('.device-name').value,
+                    model: item.querySelector('.device-model').value || undefined,
+                    ip: item.querySelector('.device-ip').value || undefined,
+                    position: {
+                        x: parseInt(item.querySelector('.device-x').value),
+                        y: parseInt(item.querySelector('.device-y').value)
+                    }
+                };
+
+                // Add VMs for hosts
+                const vmsField = item.querySelector('.device-vms');
+                if (vmsField) {
+                    const vmsText = vmsField.value.trim();
+                    if (vmsText) {
+                        try {
+                            device.vms = JSON.parse(vmsText);
+                        } catch (e) {
+                            console.error('Invalid JSON for VMs:', e);
+                        }
+                    }
+                }
+
+                // Remove undefined values
+                Object.keys(device).forEach(key => device[key] === undefined && delete device[key]);
+
+                devices.push(device);
+            });
+
+            return devices;
+        }
+
+        function resetClientForm() {
+            document.getElementById('client-area').value = '';
+            document.getElementById('client-id').value = '';
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-summary').value = '';
+            document.getElementById('client-output').style.display = 'none';
+        }
+
+        function resetLocationForm() {
+            document.getElementById('location-id').value = '';
+            document.getElementById('location-name').value = '';
+            document.getElementById('location-description').value = '';
+            document.getElementById('location-address').value = '';
+            document.getElementById('diagram-width').value = '960';
+            document.getElementById('diagram-height').value = '560';
+
+            document.getElementById('firewalls-list').innerHTML = '';
+            document.getElementById('switches-list').innerHTML = '';
+            document.getElementById('access-points-list').innerHTML = '';
+            document.getElementById('hosts-list').innerHTML = '';
+
+            deviceCounters.firewall = 0;
+            deviceCounters.switch = 0;
+            deviceCounters.accesspoint = 0;
+            deviceCounters.host = 0;
+
+            document.getElementById('location-output').style.display = 'none';
+        }
+
+        function copyToClipboard(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Code copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

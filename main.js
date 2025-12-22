@@ -489,6 +489,9 @@ function renderDiagram() {
     diagramCard.appendChild(canvas);
     diagramCard.appendChild(createLegend());
 
+    // Add click handlers for mobile devices to toggle device-meta visibility
+    addDeviceClickHandlers(canvas);
+
     diagramLayout.appendChild(diagramCard);
 
     const vmPanel = createVmPanel(location.diagram?.hosts ?? []);
@@ -713,13 +716,10 @@ function buildDiagramSVG(diagramConfig) {
         const labelY = device.position.y + 6;
         const metaY = device.position.y + dims.height / 2 + 18;
         const meta = [device.model, device.ip].filter(Boolean).join(' • ');
-        const title = buildTitle(device, type);
 
         segments.push(`
             <g class="device-group" data-type="${type}" data-id="${escapeHtml(device.id)}">
-                <rect class="device ${classMap[type]}" x="${x}" y="${y}" width="${dims.width}" height="${dims.height}" rx="10" ry="10">
-                    <title>${title}</title>
-                </rect>
+                <rect class="device ${classMap[type]}" x="${x}" y="${y}" width="${dims.width}" height="${dims.height}" rx="10" ry="10"></rect>
                 <text class="device-label" x="${device.position.x}" y="${labelY}" text-anchor="middle">${escapeHtml(device.name)}</text>
                 ${meta ? `<text class="device-meta" x="${device.position.x}" y="${metaY}" text-anchor="middle">${escapeHtml(meta)}</text>` : ''}
             </g>
@@ -733,16 +733,13 @@ function buildDiagramSVG(diagramConfig) {
             return;
         }
 
-        const title = buildTitle(device, type);
         const labelY = device.position.y + 6;
         const metaY = device.position.y + ellipseDimensions.ry + 20;
         const meta = [device.model, device.ip].filter(Boolean).join(' • ');
 
         segments.push(`
             <g class="device-group" data-type="${type}" data-id="${escapeHtml(device.id)}">
-                <ellipse class="device ${classMap[type]}" cx="${device.position.x}" cy="${device.position.y}" rx="${ellipseDimensions.rx}" ry="${ellipseDimensions.ry}">
-                    <title>${title}</title>
-                </ellipse>
+                <ellipse class="device ${classMap[type]}" cx="${device.position.x}" cy="${device.position.y}" rx="${ellipseDimensions.rx}" ry="${ellipseDimensions.ry}"></ellipse>
                 <text class="device-label" x="${device.position.x}" y="${labelY}" text-anchor="middle">${escapeHtml(device.name)}</text>
                 ${meta ? `<text class="device-meta" x="${device.position.x}" y="${metaY}" text-anchor="middle">${escapeHtml(meta)}</text>` : ''}
             </g>
@@ -844,6 +841,106 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function addDeviceClickHandlers(canvas) {
+    const deviceGroups = canvas.querySelectorAll('.device-group');
+    const tooltip = document.createElement('div');
+    tooltip.className = 'device-tooltip';
+    canvas.style.position = 'relative';
+    canvas.appendChild(tooltip);
+
+    let activeDevice = null;
+
+    function showTooltip(group, event) {
+        const deviceType = group.dataset.type;
+        const deviceId = group.dataset.id;
+
+        // Get device data
+        const metaText = group.querySelector('.device-meta');
+        if (!metaText || !metaText.textContent.trim()) {
+            hideTooltip();
+            return;
+        }
+
+        tooltip.textContent = metaText.textContent;
+        tooltip.classList.add('visible');
+
+        // Position tooltip
+        const svgElement = canvas.querySelector('.network-svg');
+        const canvasRect = canvas.getBoundingClientRect();
+        const svgRect = svgElement.getBoundingClientRect();
+
+        let clientX, clientY;
+        if (event.type === 'mousemove') {
+            clientX = event.clientX;
+            clientY = event.clientY;
+        } else {
+            // For click events, position above the device group
+            const groupRect = group.getBoundingClientRect();
+            clientX = groupRect.left + groupRect.width / 2;
+            clientY = groupRect.top;
+        }
+
+        const x = clientX - canvasRect.left;
+        const y = clientY - canvasRect.top - tooltip.offsetHeight - 12;
+
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y}px`;
+        tooltip.style.transform = 'translateX(-50%)';
+    }
+
+    function hideTooltip() {
+        tooltip.classList.remove('visible');
+    }
+
+    // Desktop hover behavior
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        deviceGroups.forEach(group => {
+            group.addEventListener('mouseenter', (e) => {
+                showTooltip(group, e);
+            });
+
+            group.addEventListener('mousemove', (e) => {
+                if (tooltip.classList.contains('visible')) {
+                    const canvasRect = canvas.getBoundingClientRect();
+                    const x = e.clientX - canvasRect.left;
+                    const y = e.clientY - canvasRect.top - tooltip.offsetHeight - 12;
+                    tooltip.style.left = `${x}px`;
+                    tooltip.style.top = `${y}px`;
+                }
+            });
+
+            group.addEventListener('mouseleave', hideTooltip);
+        });
+    }
+
+    // Mobile/touch behavior
+    deviceGroups.forEach(group => {
+        group.style.cursor = 'pointer';
+
+        group.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            if (activeDevice === group) {
+                // Click same device - hide tooltip
+                hideTooltip();
+                activeDevice = null;
+            } else {
+                // Click different device - show tooltip
+                activeDevice = group;
+                showTooltip(group, e);
+            }
+        });
+    });
+
+    // Click anywhere else to hide tooltip
+    canvas.addEventListener('click', (e) => {
+        if (!e.target.closest('.device-group')) {
+            hideTooltip();
+            activeDevice = null;
+        }
+    });
 }
 
 function goToAreas() {
