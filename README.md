@@ -26,7 +26,8 @@ NetworkDiagram
 │       ├── riverwalk-hospitality.js
 │       ├── gulf-coast-shipping.js
 │       ├── metroplex-retail.js
-│       └── medical-provider-resources.js
+│       ├── medical-provider-resources.js
+│       └── 62BDG.js
 ├── src/
 │   └── components/                 # Legacy component prototypes (not currently used)
 ├── styles/
@@ -107,13 +108,16 @@ export default {
 
 ### Using the Admin Helper Tool (Recommended)
 
-The easiest way to add new clients and locations is to use the **Admin Helper Tool**:
+The easiest way to add new clients, locations, and devices is to use the **Admin Helper Tool**:
 
 1. Open `admin.html` in your browser
-2. Fill out the form for a new client or location
-3. Click "Generate Code"
+2. Choose from three tabs:
+   - **New Client** - Generate complete client configuration
+   - **New Location** - Generate a full location with multiple devices
+   - **Add Device** - Generate a single device to add to an existing location
+3. Fill out the form and click "Generate Code"
 4. Copy the generated code and paste it into the appropriate file
-5. Follow the on-screen instructions for where to save it
+5. Follow the detailed step-by-step instructions shown on screen
 
 The admin helper automatically generates properly formatted configuration code with device positioning, making it much faster than manual editing.
 

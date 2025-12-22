@@ -252,6 +252,7 @@
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="client">New Client</button>
         <button class="tab-btn" data-tab="location">New Location</button>
+        <button class="tab-btn" data-tab="device">Add Device</button>
     </div>
 
     <!-- CLIENT TAB -->
@@ -263,12 +264,12 @@
                 <label>Area <span class="optional">(where this client belongs)</span></label>
                 <select id="client-area">
                     <option value="">Select an area...</option>
-                    <option value="midwest">Midwest</option>
-                    <option value="southwest">Southwest</option>
-                    <option value="southeast">Southeast</option>
-                    <option value="northeast">Northeast</option>
-                    <option value="pacificnorthwest">Pacific Northwest</option>
-                    <option value="texas">Texas</option>
+                    <option value="wichita">Wichita</option>
+                    <option value="denver">Denver</option>
+                    <option value="kansas-city">Kansas City</option>
+                    <option value="san-antonio">San Antonio</option>
+                    <option value="corpus-christi">Corpus Christi</option>
+                    <option value="dallas">Dallas</option>
                 </select>
             </div>
 
@@ -298,11 +299,131 @@
                     <pre id="client-code"></pre>
                 </div>
                 <div class="help-text" style="margin-top: 15px;">
-                    <strong>Instructions:</strong><br>
-                    1. Copy the generated code above<br>
-                    2. Open the file <code>data/clients/[client-id].js</code> (create it if it doesn't exist)<br>
-                    3. Paste the code and save<br>
-                    4. Add this client to the appropriate area in <code>data/areas.js</code>
+                    <strong>Step-by-step Instructions:</strong><br><br>
+
+                    <strong>Step 1: Create the client file</strong><br>
+                    • Create a new file: <code>data/clients/<span id="client-filename">[client-id]</span>.js</code><br>
+                    • Copy the generated code above and paste it into this new file<br>
+                    • Save the file<br><br>
+
+                    <strong>Step 2: Import the client in networkData.js</strong><br>
+                    • Open <code>data/networkData.js</code><br>
+                    • Add this import at the top with the other imports:<br>
+                    <code style="display: block; background: #f5f5f5; padding: 8px; margin: 5px 0; border-radius: 4px;">import <span id="import-name">[clientName]</span> from './clients/<span id="import-file">[client-id]</span>.js';</code>
+                    • Add the client to the <code>clientsMap</code> object:<br>
+                    <code style="display: block; background: #f5f5f5; padding: 8px; margin: 5px 0; border-radius: 4px;">'<span id="map-key">[client-id]</span>': <span id="map-value">[clientName]</span>,</code><br>
+
+                    <strong>Step 3: Add to the area</strong><br>
+                    • Open <code>data/areas.js</code><br>
+                    • Find the area object for "<span id="area-name">[area]</span>"<br>
+                    • Add '<span id="area-client-id">[client-id]</span>' to the <code>clientIds</code> array<br><br>
+
+                    <strong>Step 4: Test</strong><br>
+                    • Open <code>index.html</code> in your browser<br>
+                    • Navigate to the area and verify the new client appears<br>
+                    • If you see errors, check the browser console (F12)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEVICE TAB -->
+    <div id="device-tab" class="tab-content">
+        <div class="form-section">
+            <h2>Device Information</h2>
+            <p class="help-text" style="margin-top: 0;">Add a single device to an existing location. This generates code for one device that you can paste into the appropriate array.</p>
+
+            <div class="form-group">
+                <label>Device Type</label>
+                <select id="device-type">
+                    <option value="firewall">Firewall</option>
+                    <option value="switch">Switch</option>
+                    <option value="accesspoint">Access Point</option>
+                    <option value="host">Hypervisor Host</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Device ID <span class="optional">(lowercase, no spaces)</span></label>
+                <input type="text" id="device-id" placeholder="firewall-2" />
+            </div>
+
+            <div class="form-group">
+                <label>Device Name</label>
+                <input type="text" id="device-name" placeholder="Main Firewall" />
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Model <span class="optional">(optional)</span></label>
+                    <input type="text" id="device-model" placeholder="FortiGate 60F" />
+                </div>
+                <div class="form-group">
+                    <label>IP Address <span class="optional">(optional)</span></label>
+                    <input type="text" id="device-ip" placeholder="10.0.0.1" />
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Position X</label>
+                    <input type="number" id="device-pos-x" placeholder="480" value="480" />
+                </div>
+                <div class="form-group">
+                    <label>Position Y</label>
+                    <input type="number" id="device-pos-y" placeholder="100" value="100" />
+                </div>
+            </div>
+
+            <div id="device-vms-section" style="display: none;">
+                <div class="form-group">
+                    <label>Virtual Machines <span class="optional">(JSON array - optional)</span></label>
+                    <textarea id="device-vms" placeholder='[{"name": "DC1", "role": "Domain Controller", "os": "Windows Server 2022", "ip": "10.0.0.10"}]'></textarea>
+                    <p class="help-text">Enter VMs as a JSON array. Each VM should have name, role, os, and ip fields.</p>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateDeviceCode()">Generate Code</button>
+                <button class="btn btn-secondary" onclick="resetDeviceForm()">Reset Form</button>
+            </div>
+
+            <div id="device-output" style="display: none;">
+                <div class="output-section">
+                    <button class="copy-btn" onclick="copyToClipboard('device-code')">Copy Code</button>
+                    <pre id="device-code"></pre>
+                </div>
+                <div class="help-text" style="margin-top: 15px;">
+                    <strong>Step-by-step Instructions:</strong><br><br>
+
+                    <strong>Step 1: Find the location file</strong><br>
+                    • Navigate to <code>data/clients/</code> and open the client file that contains the location you want to edit<br>
+                    • Find the location object within the <code>locations</code> array<br><br>
+
+                    <strong>Step 2: Add the device code</strong><br>
+                    • Inside the location's <code>diagram</code> object, find the <code id="device-array-name">[device-type]</code> array<br>
+                    • If the array doesn't exist, create it: <code><span id="device-array-create">[device-type]</span>: []</code><br>
+                    • Copy the generated device code above and paste it into the array<br>
+                    • If there are existing devices, add a comma after the previous device<br><br>
+
+                    <strong>Example:</strong><br>
+                    <code style="display: block; background: #f5f5f5; padding: 8px; margin: 5px 0; border-radius: 4px; white-space: pre-wrap;">diagram: {
+    size: { width: 960, height: 560 },
+    <span id="example-array-name">[device-type]</span>: [
+        // ... existing devices ...
+        <strong>// Paste your new device here</strong>
+    ],
+    links: [...]
+}</code><br>
+
+                    <strong>Step 3: (Optional) Add connections</strong><br>
+                    • If this device connects to other devices, add link objects to the <code>links</code> array<br>
+                    • Example: <code>{ from: { type: '<span id="link-type">[device-type]</span>', id: '<span id="link-id">[device-id]</span>' }, to: { type: 'switches', id: 'switch-1' } }</code><br><br>
+
+                    <strong>Step 4: Test</strong><br>
+                    • Open <code>index.html</code> in your browser<br>
+                    • Navigate to the location and verify the new device appears in the correct position<br>
+                    • If you see errors, check the browser console (F12)
                 </div>
             </div>
         </div>
@@ -352,25 +473,33 @@
 
             <div class="form-group">
                 <label>Firewalls</label>
-                <div id="firewalls-list" class="device-list"></div>
+                <div id="firewalls-list" class="device-list">
+                    <p class="help-text" style="margin: 0; text-align: center;">No firewalls added yet. Click "Add Firewall" to add one.</p>
+                </div>
                 <button class="btn btn-secondary" onclick="addDevice('firewall')" style="margin-top: 10px;">Add Firewall</button>
             </div>
 
             <div class="form-group">
                 <label>Switches</label>
-                <div id="switches-list" class="device-list"></div>
+                <div id="switches-list" class="device-list">
+                    <p class="help-text" style="margin: 0; text-align: center;">No switches added yet. Click "Add Switch" to add one.</p>
+                </div>
                 <button class="btn btn-secondary" onclick="addDevice('switch')" style="margin-top: 10px;">Add Switch</button>
             </div>
 
             <div class="form-group">
                 <label>Access Points</label>
-                <div id="access-points-list" class="device-list"></div>
+                <div id="access-points-list" class="device-list">
+                    <p class="help-text" style="margin: 0; text-align: center;">No access points added yet. Click "Add Access Point" to add one.</p>
+                </div>
                 <button class="btn btn-secondary" onclick="addDevice('accesspoint')" style="margin-top: 10px;">Add Access Point</button>
             </div>
 
             <div class="form-group">
                 <label>Hypervisor Hosts</label>
-                <div id="hosts-list" class="device-list"></div>
+                <div id="hosts-list" class="device-list">
+                    <p class="help-text" style="margin: 0; text-align: center;">No hosts added yet. Click "Add Host" to add one.</p>
+                </div>
                 <button class="btn btn-secondary" onclick="addDevice('host')" style="margin-top: 10px;">Add Host</button>
             </div>
 
@@ -406,7 +535,7 @@
             });
         });
 
-        // Device counters
+        // Device counters - track total devices added, not just current count
         const deviceCounters = {
             firewall: 0,
             switch: 0,
@@ -419,10 +548,17 @@
             const listId = type === 'accesspoint' ? 'access-points-list' : type === 'host' ? 'hosts-list' : `${type}s-list`;
             const list = document.getElementById(listId);
 
+            // Remove help text if this is the first device
+            const helpText = list.querySelector('.help-text');
+            if (helpText) {
+                helpText.remove();
+            }
+
             const deviceDiv = document.createElement('div');
             deviceDiv.className = 'device-item';
             deviceDiv.dataset.type = type;
             deviceDiv.dataset.index = counter;
+            deviceDiv.dataset.uniqueId = `${type}-${Date.now()}-${counter}`; // Unique identifier for each device
 
             let deviceHTML = `
                 <div class="device-header">
@@ -502,7 +638,26 @@
     ]
 };`;
 
+            // Convert client-id to camelCase for import name
+            const importName = id.split('-').map((word, index) =>
+                index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+            ).join('');
+
+            // Get area name from the select option
+            const areaSelect = document.getElementById('client-area');
+            const areaName = areaSelect.options[areaSelect.selectedIndex].text;
+
             document.getElementById('client-code').textContent = code;
+
+            // Update instruction placeholders
+            document.getElementById('client-filename').textContent = id;
+            document.getElementById('import-name').textContent = importName;
+            document.getElementById('import-file').textContent = id;
+            document.getElementById('map-key').textContent = id;
+            document.getElementById('map-value').textContent = importName;
+            document.getElementById('area-name').textContent = areaName;
+            document.getElementById('area-client-id').textContent = id;
+
             document.getElementById('client-output').style.display = 'block';
         }
 
@@ -607,10 +762,10 @@
             document.getElementById('diagram-width').value = '960';
             document.getElementById('diagram-height').value = '560';
 
-            document.getElementById('firewalls-list').innerHTML = '';
-            document.getElementById('switches-list').innerHTML = '';
-            document.getElementById('access-points-list').innerHTML = '';
-            document.getElementById('hosts-list').innerHTML = '';
+            document.getElementById('firewalls-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No firewalls added yet. Click "Add Firewall" to add one.</p>';
+            document.getElementById('switches-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No switches added yet. Click "Add Switch" to add one.</p>';
+            document.getElementById('access-points-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No access points added yet. Click "Add Access Point" to add one.</p>';
+            document.getElementById('hosts-list').innerHTML = '<p class="help-text" style="margin: 0; text-align: center;">No hosts added yet. Click "Add Host" to add one.</p>';
 
             deviceCounters.firewall = 0;
             deviceCounters.switch = 0;
@@ -625,6 +780,119 @@
             navigator.clipboard.writeText(code).then(() => {
                 alert('Code copied to clipboard!');
             });
+        }
+
+        // Device tab functionality
+        document.getElementById('device-type').addEventListener('change', function() {
+            const vmsSection = document.getElementById('device-vms-section');
+            if (this.value === 'host') {
+                vmsSection.style.display = 'block';
+            } else {
+                vmsSection.style.display = 'none';
+            }
+
+            // Update placeholder based on device type
+            const idField = document.getElementById('device-id');
+            const nameField = document.getElementById('device-name');
+            const modelField = document.getElementById('device-model');
+
+            switch(this.value) {
+                case 'firewall':
+                    idField.placeholder = 'firewall-2';
+                    nameField.placeholder = 'Main Firewall';
+                    modelField.placeholder = 'FortiGate 60F';
+                    break;
+                case 'switch':
+                    idField.placeholder = 'switch-2';
+                    nameField.placeholder = 'Core Switch';
+                    modelField.placeholder = 'FortiSwitch 124F';
+                    break;
+                case 'accesspoint':
+                    idField.placeholder = 'ap-2';
+                    nameField.placeholder = 'Office AP';
+                    modelField.placeholder = 'FortiAP 231F';
+                    break;
+                case 'host':
+                    idField.placeholder = 'host-2';
+                    nameField.placeholder = 'Hypervisor Host';
+                    modelField.placeholder = 'Dell PowerEdge R640';
+                    break;
+            }
+        });
+
+        function generateDeviceCode() {
+            const type = document.getElementById('device-type').value;
+            const id = document.getElementById('device-id').value;
+            const name = document.getElementById('device-name').value;
+            const model = document.getElementById('device-model').value;
+            const ip = document.getElementById('device-ip').value;
+            const x = document.getElementById('device-pos-x').value;
+            const y = document.getElementById('device-pos-y').value;
+
+            if (!id || !name) {
+                alert('Please fill in Device ID and Device Name');
+                return;
+            }
+
+            const device = {
+                id: id,
+                name: name
+            };
+
+            if (model) device.model = model;
+            if (ip) device.ip = ip;
+
+            device.position = {
+                x: parseInt(x),
+                y: parseInt(y)
+            };
+
+            // Add VMs for hosts
+            if (type === 'host') {
+                const vmsText = document.getElementById('device-vms').value.trim();
+                if (vmsText) {
+                    try {
+                        device.vms = JSON.parse(vmsText);
+                    } catch (e) {
+                        alert('Invalid JSON for VMs. Please check your formatting.');
+                        return;
+                    }
+                }
+            }
+
+            const code = JSON.stringify(device, null, 4);
+
+            document.getElementById('device-code').textContent = code;
+
+            // Update instruction placeholders
+            const arrayNames = {
+                'firewall': 'firewalls',
+                'switch': 'switches',
+                'accesspoint': 'accessPoints',
+                'host': 'hosts'
+            };
+
+            const arrayName = arrayNames[type];
+            document.getElementById('device-array-name').textContent = arrayName;
+            document.getElementById('device-array-create').textContent = arrayName;
+            document.getElementById('example-array-name').textContent = arrayName;
+            document.getElementById('link-type').textContent = arrayName;
+            document.getElementById('link-id').textContent = id;
+
+            document.getElementById('device-output').style.display = 'block';
+        }
+
+        function resetDeviceForm() {
+            document.getElementById('device-type').value = 'firewall';
+            document.getElementById('device-id').value = '';
+            document.getElementById('device-name').value = '';
+            document.getElementById('device-model').value = '';
+            document.getElementById('device-ip').value = '';
+            document.getElementById('device-pos-x').value = '480';
+            document.getElementById('device-pos-y').value = '100';
+            document.getElementById('device-vms').value = '';
+            document.getElementById('device-vms-section').style.display = 'none';
+            document.getElementById('device-output').style.display = 'none';
         }
     </script>
 </body>
