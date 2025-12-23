@@ -12,7 +12,7 @@ export default {
                 size: { width: 960, height: 560 },
                 firewalls: [
                             {
-                                "id": "DBG-71F-Main",
+                                "id": "BDG-71F-Main",
                                 "name": "DBG-71F-Main",
                                 "model": "FortiGate 71G",
                                 "serial": "FGT71FTK22002202",
