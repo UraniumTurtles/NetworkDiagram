@@ -700,9 +700,9 @@ function buildDiagramSVG(diagramConfig) {
     };
 
     const rectDimensions = {
-        firewalls: { width: 140, height: 48 },
-        switches: { width: 140, height: 48 },
-        hosts: { width: 160, height: 60 }
+        firewalls: { width: 200, height: 48 },
+        switches: { width: 220, height: 48 },
+        hosts: { width: 180, height: 60 }
     };
 
     const ellipseDimensions = { rx: 48, ry: 28 };
