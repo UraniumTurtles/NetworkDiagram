@@ -12,8 +12,8 @@ export default {
                 size: { width: 960, height: 560 },
                 firewalls: [
                             {
-                                "id": "DBG-71F-Main",
-                                "name": "DBG-71F-Main",
+                                "id": "BDG-71F-Main",
+                                "name": "BDG-71F-Main",
                                 "model": "FortiGate 71G",
                                 "serial": "FGT71FTK22002202",
                                 "ip": "10.255.251.1",
@@ -63,7 +63,7 @@ export default {
                             }
                 ],
                 links: [
-                    { from: { type: 'switches', id: 'core', port: 'Port1' }, to: { type: 'firewalls', id: 'DBG-71F-Main', port: 'Port1' } },
+                    { from: { type: 'switches', id: 'core', port: 'Port1' }, to: { type: 'firewalls', id: 'BDG-71F-Main', port: 'Port1' } },
                     { from: { type: 'accessPoints', id: 'BDG-AP1', port: '' }, to: { type: 'switches', id: 'core', port: 'Port23' } },
                     { from: { type: 'accessPoints', id: 'BDG-AP2', port: '' }, to: { type: 'switches', id: 'core', port: 'Port24' } },
                 ],
