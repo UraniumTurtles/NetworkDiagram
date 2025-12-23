@@ -30,7 +30,7 @@ export default [
         id: 'corpus-christi',
         name: 'Corpus Christi',
         description: 'Coastal logistics clients managed through Corpus Christi support center.',
-        clientIds: ['gulf-coast-shipping']
+        clientIds: ['gulf-coast-shipping', '82CCRE']
     },
     {
         id: 'dallas',

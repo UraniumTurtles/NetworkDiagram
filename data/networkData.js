@@ -15,6 +15,7 @@ import gulfCoastShipping from './clients/gulf-coast-shipping.js';
 import metroplexRetail from './clients/metroplex-retail.js';
 import medicalProviderResources from './clients/medical-provider-resources.js';
 import bakerDesignGroup from './clients/62BDG.js';
+import ccredc from './clients/82CCRE.js';
 
 // Create a map of client ID to client data for easy lookup
 const clientsMap = {
@@ -27,7 +28,8 @@ const clientsMap = {
     'gulf-coast-shipping': gulfCoastShipping,
     'metroplex-retail': metroplexRetail,
     'medical-provider-resources': medicalProviderResources,
-    '62BDG': bakerDesignGroup
+    '62BDG': bakerDesignGroup,
+    '82CCRE': ccredc,
 };
 
 // Assemble the areas with their clients
