@@ -45,7 +45,10 @@ export default {
                             }
                         }
                     ],
-                    links: []
+                    links: [
+                        { from: { type: 'firewalls', id: 'CCRE-61F-Main', port: 'PortA' }, to: { type: 'switches', id: 'CCRE-148FFPOE-MAIN-SW1', port: 'Port48' }, },
+                        { from: { type: 'switches', id: 'CCRE-148FFPOE-MAIN-SW1', port: 'port47' }, to: { type: 'switches', id: 'CCRE-108FFPOE-MAIN-SW2', port: 'port8' } }
+                    ]
                 }
             }
     ]
