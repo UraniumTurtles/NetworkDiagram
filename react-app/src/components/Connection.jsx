@@ -12,14 +12,14 @@ const Connection = ({ from, to, label, animated = true }) => {
   // Calculate length for animation
   const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 
+  // Create path data for line (pathLength only works on path elements)
+  const pathData = `M ${x1} ${y1} L ${x2} ${y2}`;
+
   return (
     <g className="connection-group">
-      {/* Main connection line */}
-      <motion.line
-        x1={x1}
-        y1={y1}
-        x2={x2}
-        y2={y2}
+      {/* Main connection line - using path for pathLength animation support */}
+      <motion.path
+        d={pathData}
         className="connection-line"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 0.6 }}

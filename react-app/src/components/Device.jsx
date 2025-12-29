@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './Device.css';
 
 const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
@@ -15,27 +15,27 @@ const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
 
   const dim = dimensions[type] || dimensions.firewall;
 
-  // Animation variants
+  // Memoize the random delay to prevent re-calculation on each render
+  const animationDelay = useMemo(() => Math.random() * 0.3, []);
+
+  // Animation variants - using transform origin at device center
   const deviceVariants = {
     initial: {
       scale: 0,
       opacity: 0,
-      rotate: -180
     },
     animate: {
       scale: 1,
       opacity: 1,
-      rotate: 0,
       transition: {
         type: "spring",
         stiffness: 260,
         damping: 20,
-        delay: Math.random() * 0.3 // Stagger effect
+        delay: animationDelay
       }
     },
     hover: {
-      scale: 1.1,
-      y: -5,
+      scale: 1.08,
       transition: {
         type: "spring",
         stiffness: 400,
@@ -47,10 +47,9 @@ const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
     }
   };
 
-  // Pulsing animation for the device
+  // Pulsing animation for the device shape
   const pulseVariants = {
     pulse: {
-      scale: [1, 1.05, 1],
       opacity: [0.7, 1, 0.7],
       transition: {
         duration: 2,
@@ -71,7 +70,11 @@ const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer',
+        transformOrigin: `${x}px ${y}px`,
+        transformBox: 'fill-box'
+      }}
     >
       {/* Glow effect when hovered */}
       {isHovered && (
