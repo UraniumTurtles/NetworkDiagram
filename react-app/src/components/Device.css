@@ -1,0 +1,71 @@
+/* Device base styles */
+.device {
+  stroke-width: 2.5;
+  transition: all 0.3s ease;
+}
+
+/* Device types - colors matching original design */
+.device-firewall {
+  fill: rgba(255, 166, 58, 0.18);
+  stroke: rgba(255, 166, 58, 0.8);
+}
+
+.device-switch {
+  fill: rgba(0, 102, 128, 0.15);
+  stroke: rgba(0, 102, 128, 0.85);
+}
+
+.device-host {
+  fill: rgba(0, 102, 128, 0.1);
+  stroke: rgba(0, 102, 128, 0.7);
+}
+
+.device-ap {
+  fill: rgba(141, 198, 63, 0.2);
+  stroke: rgba(141, 198, 63, 0.9);
+}
+
+/* Glow effects */
+.device-glow {
+  stroke: none;
+  filter: blur(8px);
+}
+
+.device-glow-firewall {
+  fill: rgba(255, 166, 58, 0.4);
+}
+
+.device-glow-switch {
+  fill: rgba(0, 102, 128, 0.4);
+}
+
+.device-glow-host {
+  fill: rgba(0, 102, 128, 0.3);
+}
+
+.device-glow-ap {
+  fill: rgba(141, 198, 63, 0.4);
+}
+
+/* Text styles */
+.device-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  fill: #333;
+  pointer-events: none;
+  user-select: none;
+}
+
+.device-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  fill: #666;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Device group */
+.device-group {
+  transition: transform 0.3s ease;
+}

@@ -1,0 +1,26 @@
+/* Connection line styles */
+.connection-line {
+  stroke: #b0b0b0;
+  stroke-width: 2.2;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Animated particles flowing through connections */
+.connection-particle {
+  fill: #006680;
+  filter: drop-shadow(0 0 3px rgba(0, 102, 128, 0.6));
+}
+
+/* Connection label */
+.connection-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  fill: #666;
+  pointer-events: none;
+  user-select: none;
+}
+
+.connection-group {
+  pointer-events: none;
+}
