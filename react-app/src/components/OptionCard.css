@@ -1,0 +1,40 @@
+.option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.option-card:hover {
+  border-color: #006680;
+}
+
+.option-card-title {
+  font-size: 1.1rem;
+  color: #006680;
+  margin-bottom: 8px;
+}
+
+.option-card-subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.option-card-meta {
+  font-size: 0.85rem;
+  color: #888;
+  background: #f5f5f5;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-top: auto;
+}
