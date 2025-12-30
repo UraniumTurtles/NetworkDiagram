@@ -71,9 +71,7 @@ const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
       style={{
-        cursor: 'pointer',
-        transformOrigin: `${x}px ${y}px`,
-        transformBox: 'fill-box'
+        cursor: 'pointer'
       }}
     >
       {/* Glow effect when hovered */}
