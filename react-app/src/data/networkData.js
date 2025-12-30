@@ -31,7 +31,7 @@ const clientsMap = {
     'medical-provider-resources': medicalProviderResources,
     '62BDG': bakerDesignGroup,
     '82CCRE': ccredc,
-    '62KARN': karnesCity
+    '62KARN': karnesCity,
 };
 
 // Assemble the areas with their clients
