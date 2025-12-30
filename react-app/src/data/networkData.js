@@ -16,6 +16,7 @@ import metroplexRetail from './clients/metroplex-retail.js';
 import medicalProviderResources from './clients/medical-provider-resources.js';
 import bakerDesignGroup from './clients/62BDG.js';
 import ccredc from './clients/82CCRE.js';
+import karnesCity from './clients/62KARN.js';
 
 // Create a map of client ID to client data for easy lookup
 const clientsMap = {
@@ -30,6 +31,7 @@ const clientsMap = {
     'medical-provider-resources': medicalProviderResources,
     '62BDG': bakerDesignGroup,
     '82CCRE': ccredc,
+    '62KARN': karnesCity
 };
 
 // Assemble the areas with their clients
