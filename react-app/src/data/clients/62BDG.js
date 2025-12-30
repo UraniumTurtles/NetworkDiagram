@@ -63,9 +63,9 @@ export default {
                             }
                 ],
                 links: [
-                    { from: { type: 'switches', id: 'core', port: 'Port1' }, to: { type: 'firewalls', id: 'BDG-71F-Main', port: 'Port1' } },
-                    { from: { type: 'accessPoints', id: 'BDG-AP1', port: '' }, to: { type: 'switches', id: 'core', port: 'Port23' } },
-                    { from: { type: 'accessPoints', id: 'BDG-AP2', port: '' }, to: { type: 'switches', id: 'core', port: 'Port24' } },
+                    { from: { type: 'firewalls', id: 'BDG-71F-Main', port: 'Port1' }, to: { type: 'switches', id: 'core', port: 'Port1' } },
+                    { from: { type: 'switches', id: 'core', port: 'Port23' }, to: { type: 'accessPoints', id: 'BDG-AP1', port: '' } },
+                    { from: { type: 'switches', id: 'core', port: 'Port24' }, to: { type: 'accessPoints', id: 'BDG-AP2', port: '' } },
                 ],
             }
         }
