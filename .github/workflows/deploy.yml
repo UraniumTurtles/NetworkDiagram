@@ -36,6 +36,12 @@ jobs:
         working-directory: ./react-app
         run: npm run build
 
+      - name: List build output
+        run: ls -la react-app/dist/
+
+      - name: Add .nojekyll file
+        run: touch react-app/dist/.nojekyll
+
       - name: Copy admin.html to dist
         run: cp admin.html react-app/dist/
 
