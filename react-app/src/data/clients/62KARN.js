@@ -16,7 +16,11 @@ export default {
                         "name": "KARN-61F-CITYHALL",
                         "model": "FortiGate 61F",
                         "serial": "FGT61FTK23004294",
-                        "ip": "10.10.10.50"
+                        "ip": "10.10.10.50",
+                        "position": {
+                                "x": 480,
+                                "y": 100
+                        }
                     }
                 ],
                 switches: [
