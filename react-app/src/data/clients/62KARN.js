@@ -19,7 +19,7 @@ export default {
                         "ip": "10.10.10.50"
                     }
                 ],
-                Switches: [
+                switches: [
 
                 ]
             }
