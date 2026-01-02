@@ -1,265 +1,327 @@
 # Network Diagram Explorer
 
-The Network Diagram Explorer is a scalable, client- and site-aware viewer for MSPs to visualize network topologies. It provides an interactive way to navigate from geographic areas, to clients, and finally to individual locations where firewall, switching, wireless, and virtualization assets are displayed.
+A modern React-based web application for MSPs (Managed Service Providers) to visualize and document network topologies across multiple clients and locations. Built with React 18, Vite, and Framer Motion for a smooth, responsive user experience.
 
-**New Features:**
-- 🔗 **QR Code / Direct URL Routing** - Deep links to specific sites for instant access
-- 🔍 **Search functionality** - Quickly find clients and locations
-- 📱 **Mobile-optimized tooltips** - Clean device info on hover (desktop) or tap (mobile)
-- 🛠️ **Admin helper tool** - Visual form to generate new client/location configurations
-- 📁 **Modular data structure** - Individual files per client for easier maintenance
-- 📈 **Scalable architecture** - Designed to handle 100+ clients efficiently
+## Features
+
+- **Interactive Network Diagrams** - SVG-based topology visualization with animated transitions
+- **Multi-Level Navigation** - Browse by geographic area → client → location → diagram
+- **Deep Linking & QR Codes** - Direct links to specific diagrams (perfect for equipment racks)
+- **Real-time Search** - Filter clients and locations instantly
+- **Mobile Optimized** - Responsive design with touch-friendly tooltips
+- **Virtual Machine Support** - Expandable VM panels showing host details
+- **Scalable Architecture** - Handles 100+ clients efficiently
+
+## Live Demo
+
+Visit the live application: [https://uraniumturtles.github.io/NetworkDiagram](https://uraniumturtles.github.io/NetworkDiagram)
+
+## Technology Stack
+
+- **React 18** - Modern component-based UI framework
+- **Vite** - Fast build tool with hot module replacement
+- **React Router** - HashRouter for GitHub Pages compatibility
+- **Framer Motion** - Smooth page transitions and animations
+- **ES6 Modules** - Modern JavaScript module system
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+ and npm (for development)
+- Modern web browser with JavaScript enabled
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/UraniumTurtles/NetworkDiagram.git
+   cd NetworkDiagram
+   ```
+
+2. **Navigate to React app directory**
+   ```bash
+   cd react-app
+   ```
+
+3. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   - Vite will display the local URL (typically `http://localhost:5173`)
+   - Changes auto-reload with hot module replacement
+
+### Production Build
+
+```bash
+cd react-app
+npm run build
+```
+
+The production-ready files will be in `react-app/dist/`
 
 ## Project Structure
 
 ```
-NetworkDiagram
-├── data/
-│   ├── areas.js                    # Area definitions and client assignments
-│   ├── networkData.js              # Main data file (imports and assembles all data)
-│   └── clients/                    # Modular client data files
-│       ├── baxter-manufacturing.js
-│       ├── prairie-health.js
-│       ├── xpress-logistics.js
-│       ├── milehigh-logistics.js
-│       ├── heartland-credit-union.js
-│       ├── riverwalk-hospitality.js
-│       ├── gulf-coast-shipping.js
-│       ├── metroplex-retail.js
-│       ├── medical-provider-resources.js
-│       └── 62BDG.js
-├── src/
-│   └── components/                 # Legacy component prototypes (not currently used)
-├── styles/
-│   └── main.css                    # Styling for navigation and diagrams
-├── index.html                      # Application entry point
-├── admin.html                      # Admin helper tool for generating configs
-├── main.js                         # Single-page application logic
-└── README.md
+NetworkDiagram/
+├── react-app/                    # Main React application
+│   ├── src/
+│   │   ├── main.jsx              # Application entry point
+│   │   ├── App.jsx               # Router configuration
+│   │   ├── pages/                # Page components
+│   │   │   ├── AreaList.jsx      # Geographic area selection
+│   │   │   ├── ClientList.jsx    # Client selection
+│   │   │   ├── LocationList.jsx  # Location selection
+│   │   │   └── DiagramView.jsx   # Network diagram display
+│   │   ├── components/           # Reusable components
+│   │   │   ├── Layout.jsx        # Page layout with breadcrumbs
+│   │   │   ├── NetworkDiagram.jsx # SVG diagram renderer
+│   │   │   ├── Device.jsx        # Individual device rendering
+│   │   │   ├── Connection.jsx    # Network link rendering
+│   │   │   ├── OptionCard.jsx    # Clickable navigation cards
+│   │   │   ├── SearchInput.jsx   # Search functionality
+│   │   │   └── VmPanel.jsx       # VM details panel
+│   │   ├── data/                 # Network configuration data
+│   │   │   ├── areas.js          # Geographic areas
+│   │   │   ├── networkData.js    # Main data aggregator
+│   │   │   └── clients/          # Individual client configs
+│   │   ├── utils/
+│   │   │   └── transformDiagram.js # Diagram data processing
+│   │   └── index.css             # Global styles
+│   ├── vite.config.js            # Vite build configuration
+│   ├── package.json              # Dependencies
+│   └── index.html                # HTML entry point
+├── admin.html                    # Configuration generator tool
+└── README.md                     # This file
 ```
 
-## Getting Started
+## Usage
 
-### Local Development
+### Navigation Flow
 
-1. Clone or download the repository
-2. Start a local web server (required for ES modules):
-   ```bash
-   python3 -m http.server 8080
-   ```
-3. Open http://localhost:8080 in a modern browser
-4. Use the on-screen navigation to explore areas, clients, and site diagrams
+1. **Select Geographic Area** - Start by choosing a region (Northeast, Southeast, Midwest, etc.)
+2. **Choose Client** - Browse or search for a specific client
+3. **Pick Location** - Select the physical site to view
+4. **View Diagram** - Interactive network topology with device details
 
-### GitHub Pages Deployment
+### Deep Linking
 
-The application is designed to run on GitHub Pages with no build step required:
-1. Push changes to your repository
-2. Enable GitHub Pages in repository settings
-3. The static site will be automatically deployed
+Access specific diagrams directly using URL patterns:
 
-No build tooling is required—the application runs as a pure static site.
+```
+Base URL: https://uraniumturtles.github.io/NetworkDiagram
 
-## Data Model
+# View specific area
+/#/northeast
 
-The application uses a **modular data structure** where each client's data is stored in a separate file for easier maintenance and scalability.
+# View client in area
+/#/northeast/baxter-manufacturing
 
-### File Organization
+# View specific location diagram
+/#/northeast/baxter-manufacturing/headquarters
+```
 
-- **`data/areas.js`** - Defines geographic areas and which clients belong to each area
-- **`data/clients/*.js`** - Individual client files containing locations and network diagrams
-- **`data/networkData.js`** - Main file that imports and assembles all client data
+**Perfect for QR Codes** - Generate QR codes linking directly to equipment rack diagrams.
 
-### Data Structure
+### Device Information
 
-Each client file (`data/clients/client-name.js`) exports a client object:
+- **Hover (Desktop)** - Hover over any device to see detailed tooltip
+- **Tap (Mobile)** - Tap devices to display information panels
+- **Virtual Machines** - Click VM hosts to expand/collapse virtual machine lists
 
-```js
+### Search
+
+Use the search box on client and location selection screens to filter options in real-time.
+
+## Adding Network Data
+
+### Using the Admin Tool
+
+The easiest way to add clients and locations is using the included admin tool:
+
+1. Open `admin.html` in your browser
+2. Choose from three tabs:
+   - **New Client** - Generate complete client configuration
+   - **New Location** - Add location to existing client
+   - **Add Device** - Generate single device configuration
+3. Fill in the form fields
+4. Copy the generated code
+5. Follow the integration instructions provided
+
+### Manual Data Entry
+
+Client configurations are stored in `react-app/src/data/clients/` as JavaScript modules. Each client exports a default object:
+
+```javascript
 export default {
-  id: 'baxter-manufacturing',
-  name: 'Baxter Manufacturing',
-  summary: 'Multi-site manufacturing company with centralized data center',
+  id: 'client-slug',           // URL-safe identifier
+  name: 'Client Display Name',
+  summary: 'Brief description',
   locations: [
     {
-      id: 'baxter-hq',
-      name: 'Baxter Headquarters',
-      address: '123 Industrial Ave, Wichita, KS',
-      description: 'Primary production facility',
+      id: 'location-slug',
+      name: 'Location Name',
+      address: 'Physical address',
+      description: 'Description',
       diagram: {
         size: { width: 960, height: 580 },
-        firewalls: [ { id, name, model, ip, position: { x, y } } ],
-        switches: [ { id, name, model, ip, position: { x, y } } ],
-        hosts: [
-          {
-            id, name, model, ip, position: { x, y },
-            vms: [ { id, name, os, ip, role } ]  // Virtual machines
-          }
-        ],
-        accessPoints: [ { id, name, model, ip, position: { x, y } } ],
-        links: [
-          { from: { type: 'firewalls', id: 'fw-id' }, to: { type: 'switches', id: 'sw-id' } }
-        ]
+        firewalls: [...],      // Edge devices
+        switches: [...],       // Network switches
+        hosts: [...],          // Servers/hypervisors (can contain VMs)
+        accessPoints: [...],   // Wireless APs
+        links: [...]           // Connections between devices
       }
     }
   ]
 };
 ```
 
-## Adding New Content
+See `CLAUDE.md` for detailed developer documentation.
 
-### Using the Admin Helper Tool (Recommended)
+## Device Types
 
-The easiest way to add new clients, locations, and devices is to use the **Admin Helper Tool**:
+All devices share common properties: `id`, `name`, `model`, `ip`, `position` (x, y coordinates)
 
-1. Open `admin.html` in your browser
-2. Choose from three tabs:
-   - **New Client** - Generate complete client configuration
-   - **New Location** - Generate a full location with multiple devices
-   - **Add Device** - Generate a single device to add to an existing location
-3. Fill out the form and click "Generate Code"
-4. Copy the generated code and paste it into the appropriate file
-5. Follow the detailed step-by-step instructions shown on screen
+- **Firewalls** - Edge security devices (red in diagrams)
+- **Switches** - Network switches (blue in diagrams)
+- **Hosts** - Servers/hypervisors (green in diagrams)
+  - Can include `vms` array with virtual machine details
+- **Access Points** - Wireless APs (orange in diagrams)
 
-The admin helper automatically generates properly formatted configuration code with device positioning, making it much faster than manual editing.
+## Deployment
 
-### Manual Method
+### GitHub Pages (Recommended)
 
-#### Adding a New Client
+The application is configured for automatic deployment to GitHub Pages:
 
-1. **Create a new client file** in `data/clients/`:
-   ```bash
-   # Example: data/clients/acme-corp.js
-   ```
+1. Push changes to the `main` branch
+2. GitHub Actions automatically builds and deploys
+3. Changes appear at your GitHub Pages URL within minutes
 
-2. **Define the client data** using the structure above:
-   ```js
-   export default {
-     id: 'acme-corp',
-     name: 'Acme Corporation',
-     summary: 'Brief description of the client',
-     locations: [ /* ... */ ]
-   };
-   ```
+### Other Hosting
 
-3. **Import the client** in `data/networkData.js`:
-   ```js
-   import acmeCorp from './clients/acme-corp.js';
-   ```
+The built application is a static site and can be hosted anywhere:
 
-4. **Add to the clientsMap** in `data/networkData.js`:
-   ```js
-   const clientsMap = {
-     // ... existing clients
-     'acme-corp': acmeCorp
-   };
-   ```
+1. Build the production files: `npm run build`
+2. Upload the contents of `react-app/dist/` to your web server
+3. Configure your server to serve `index.html` for all routes
 
-5. **Assign to an area** in `data/areas.js`:
-   ```js
-   {
-     id: 'wichita',
-     name: 'Wichita',
-     description: '...',
-     clientIds: ['baxter-manufacturing', 'prairie-health', 'acme-corp']  // Add here
-   }
-   ```
+## Browser Compatibility
 
-#### Adding a New Location
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
-Simply add a new location object to the `locations` array in the client's file:
+Modern browser required for ES6 modules and CSS features.
 
-```js
-locations: [
-  // ... existing locations
-  {
-    id: 'new-location-id',
-    name: 'Location Name',
-    address: 'Physical address',
-    description: 'Description',
-    diagram: { /* ... */ }
-  }
-]
+## Use Cases
+
+- **MSP Documentation** - Centralized network topology documentation
+- **Client Handoffs** - Visual network documentation for clients
+- **Onboarding** - Quick reference for new technicians
+- **Equipment Racks** - QR codes linking to specific site diagrams
+- **Disaster Recovery** - Quick access to network layouts during incidents
+- **Network Planning** - Visual reference for infrastructure changes
+
+## Examples
+
+The repository includes example client configurations:
+
+- **Baxter Manufacturing** - Multi-site industrial client with ESXi hosts
+- **Prairie Health Clinic** - Healthcare facility with isolated networks
+- **62 Karn** - Residential setup with FortiGate and UniFi equipment
+
+Explore these in `react-app/src/data/clients/` for configuration examples.
+
+## Development
+
+### Key npm Commands
+
+```bash
+npm run dev          # Start development server with hot reload
+npm run build        # Build for production
+npm run preview      # Preview production build locally
+npm run lint         # Run ESLint code quality checks
 ```
 
-### Adding Devices and Links
+### File Organization
 
-- **Devices**: Each device needs `id`, `name`, `model`, `ip`, and `position: { x, y }`
-- **Hosts**: Can include a `vms` array for virtual machines
-- **Links**: Connect devices using `{ from: { type, id }, to: { type, id } }`
-  - Valid types: `'firewalls'`, `'switches'`, `'hosts'`, `'accessPoints'`
+- **Pages** (`src/pages/`) - Route-level components for each navigation level
+- **Components** (`src/components/`) - Reusable UI components
+- **Data** (`src/data/`) - Network configuration files
+- **Utils** (`src/utils/`) - Helper functions and transformations
 
-## Features
+### Code Quality
 
-### QR Code & Direct URL Routing
-- **Deep linking** - Navigate directly to any area, client, or location diagram via URL
-- **QR code friendly** - Generate QR codes for equipment racks that link directly to site diagrams
-- **Shareable URLs** - Bookmark or share links to specific network diagrams
-- **Smart fallback** - Invalid URLs gracefully redirect to the nearest valid view
-- **Browser navigation** - Full support for browser back/forward buttons
+The project uses ESLint for code quality. Run `npm run lint` before committing changes.
 
-**URL Pattern:**
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes in the `react-app/src/` directory
+4. Test locally with `npm run dev`
+5. Run `npm run build` to ensure production build works
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+## Troubleshooting
+
+### Development Server Won't Start
+
+```bash
+# Clear node_modules and reinstall
+cd react-app
+rm -rf node_modules package-lock.json
+npm install
+npm run dev
 ```
-# Direct to specific location diagram
-https://your-domain.com/#/area-id/client-id/location-id
 
-# Examples:
-https://your-domain.com/#/wichita/baxter-manufacturing/baxter-hq
-https://your-domain.com/#/wichita/baxter-manufacturing/baxter-warehouse
+### Build Failures
 
-# Partial URLs also work:
-https://your-domain.com/#/wichita                      # All clients in Wichita
-https://your-domain.com/#/wichita/baxter-manufacturing  # All Baxter locations
-```
+- Ensure Node.js 16+ is installed: `node --version`
+- Check for syntax errors in data files
+- Verify all device IDs in links exist in their respective arrays
+- Review console output for specific error messages
 
-See [QR_CODE_EXAMPLES.md](QR_CODE_EXAMPLES.md) for complete list of valid URLs for all clients and locations.
+### Diagrams Not Displaying
 
-### Navigation & Search
-- **Hierarchical navigation** - Areas → Clients → Locations → Network Diagrams
-- **Search functionality** - Real-time search on client and location selection pages
-- **Responsive breadcrumbs** - Easy navigation back to previous levels
-- **Automatic back buttons** - Quick navigation to parent views
+- Verify device positions are within diagram bounds (0,0 to width,height)
+- Check that links reference valid device types: `'firewalls'`, `'switches'`, `'hosts'`, `'accessPoints'`
+- Ensure device IDs in links match exactly (case-sensitive)
 
-### Visualization
-- **SVG-based diagrams** - Generated entirely from declarative data
-- **Smart connection routing** - Automatic line routing to device edges
-- **Device legends** - Color-coded legends for different device types
-- **Virtual machine panels** - Detailed VM inventory for each hypervisor host
-- **Interactive tooltips** - Popup tooltips on hover (desktop) or tap (mobile) showing device model and IP
-- **Mobile-optimized** - Clean, uncluttered diagrams with information available on-demand
+### GitHub Pages 404 Errors
 
-### Architecture
-- **Modular data structure** - Individual files per client for easier maintenance
-- **No build required** - Pure static site, runs directly in browser
-- **ES6 modules** - Modern JavaScript with clean imports
-- **Scalable design** - Handles 100+ clients efficiently
-- **GitHub Pages ready** - Deploy directly without configuration
+- The app uses HashRouter specifically for GitHub Pages compatibility
+- Links should use hash fragments: `/#/area/client/location`
+- If seeing 404s, verify base path in `vite.config.js` matches repository name
 
-## Extending the Explorer
+## License
 
-### Styling
-- Adjust visual appearance in `styles/main.css`
-- CSS variables for theming defined in `:root`
-- Responsive design with media queries
+This project is available for use by MSPs and IT professionals. Please retain attribution when forking or adapting.
 
-### Data Model
-- Add new device types by extending the data structures in client files
-- Modify rendering logic in `main.js` for custom device rendering
-- Add new metadata fields to devices as needed
+## Support
 
-### Functionality
-- Add custom interactivity by extending event handlers in `main.js`
-- Integrate with external APIs or data sources
-- Add export/import functionality for diagrams
+For issues, questions, or feature requests:
+- Open an issue on GitHub
+- Review `CLAUDE.md` for detailed developer documentation
+- Check existing client files for configuration examples
 
-## Scalability
+## Acknowledgments
 
-The application is optimized for MSP use with multiple clients:
+Built with modern web technologies for MSPs who need efficient, scalable network documentation tools.
 
-- ✅ **100+ clients** - Modular file structure prevents performance issues
-- ✅ **Search** - Quickly find clients and locations without scrolling
-- ✅ **Maintainability** - Edit individual client files without touching others
-- ✅ **Git workflow** - Smaller diffs, fewer merge conflicts
-- ✅ **Team collaboration** - Multiple team members can work on different clients simultaneously
+---
 
-## Browser Support
-
-The explorer targets evergreen browsers that support ES modules, template literals, and modern CSS. For legacy browser support, consider adding a build step that transpiles `main.js` and bundles assets.
+**Version**: React 18 with Vite (Migrated from vanilla JavaScript 2024)
+**Maintained by**: UraniumTurtles
+**Last Updated**: December 2024
