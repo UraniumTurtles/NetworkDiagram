@@ -62,7 +62,7 @@ export default {
                         "model": "UAP-NanoHD",
                         "ip": "10.10.10.110",
                         "position": {
-                            "x": 250,
+                            "x": 200,
                             "y": 500
                         }
                     },
@@ -72,7 +72,7 @@ export default {
                         "model": "UAP-NanoHD",
                         "ip": "10.10.10.131",
                         "position": {
-                            "x": 550,
+                            "x": 600,
                             "y": 500
                         }
                     },
@@ -83,7 +83,7 @@ export default {
                         "ip": "10.10.10.138",
                         "position": {
                             "x": 400,
-                            "y": 500
+                            "y": 600
                         }
                     }
                 ],
