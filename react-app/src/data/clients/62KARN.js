@@ -9,7 +9,7 @@ export default {
             description: '',   
             address: '1007 N Hwy 123 Karnes City, TX 78118',
             diagram: {
-                size: { width: 960, height: 560 },
+                size: { width: 960, height: 800 },
                 firewalls: [
                     {
                         "id": "KARN-61F-CITYHALL",
