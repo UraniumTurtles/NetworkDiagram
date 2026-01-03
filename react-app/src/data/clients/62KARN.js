@@ -25,8 +25,8 @@ export default {
                 ],
                 switches: [
                     {
-                        "id": "KARN-USWPRO48-CITYHALL-CORE",
-                        "name": "KARN-USWPRO48-CITYHALL-CORE",
+                        "id": "KARN-USWPRO-CITYHALL-CORE",
+                        "name": "KARN-USWPRO-CITYHALL-CORE",
                         "model": "USW-Pro-48-PoE",
                         "ip": "10.10.10.106",
                         "position": {
@@ -35,15 +35,25 @@ export default {
                         }
                     },
                     {
-                        "id": "KARN-USWPRO48-CITYHALL-SW1",
-                        "name": "KARN-USWPRO48-CITYHALL-SW1",
+                        "id": "KARN-USWPRO-CITYHALL-SW1",
+                        "name": "KARN-USWPRO-CITYHALL-SW1",
                         "model": "USW-Pro-48-PoE",
                         "ip": "10.10.10.106",
                         "position": {
                             "x": 250,
-                            "y": 450
+                            "y": 350
                         }
                     },
+                    {
+                        "id": "KARN-USWPRO-CITYHALL-SW1",
+                        "name": "KARN-USWPRO-CITYHALL-SW1",
+                        "model": "USW-Pro-48-PoE",
+                        "ip": "10.10.10.106",
+                        "position": {
+                            "x": 550,
+                            "y": 350
+                        }
+                    }
                 ]
             }
         }
