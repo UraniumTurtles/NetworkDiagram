@@ -50,7 +50,7 @@ export default {
                         "model": "USW-Pro-48-PoE",
                         "ip": "10.10.10.106",
                         "position": {
-                            "x": 550,
+                            "x": 250,
                             "y": 300
                         }
                     }
