@@ -55,10 +55,45 @@ export default {
                         }
                     }
                 ],
+                accessPoints: [
+                    {
+                        "id": "KARN-NANOHD-CITYHALL-FRONTDESK",
+                        "name": "KARN-NANOHD-CITYHALL-FRONTDESK",
+                        "model": "UAP-NanoHD",
+                        "ip": "10.10.10.110",
+                        "position": {
+                            "x": 250,
+                            "y": 500
+                        }
+                    },
+                    {
+                        "id": "KARN-NANOHD-CITYHALL-SERVERROOM",
+                        "name": "KARN-NANOHD-CITYHALL-SERVERROOM",
+                        "model": "UAP-NanoHD",
+                        "ip": "10.10.10.131",
+                        "position": {
+                            "x": 550,
+                            "y": 500
+                        }
+                    },
+                    {
+                        "id": "KARN-NANOHD-CITYHALL-CONFROOM",
+                        "name": "KARN-NANOHD-CITYHALL-CONFROOM",
+                        "model": "UAP-NanoHD",
+                        "ip": "10.10.10.138",
+                        "position": {
+                            "x": 400,
+                            "y": 500
+                        }
+                    }
+                ],
                 links: [
                     { from: { type: 'firewalls', id: 'KARN-61F-CITYHALL'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'} },
                     { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW1'} },
-                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'} }
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'} },
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-FRONTDESK'} },
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-SERVERROOM'} },
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-CONFROOM'} }
                 ]
             }
         }

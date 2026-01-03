@@ -14,7 +14,7 @@ const Device = ({ type, name, x, y, model, serial, ip, onClick }) => {
     firewall: { width: 200, height: 48, shape: 'rect' },
     switch: { width: 220, height: 48, shape: 'rect' },
     host: { width: 180, height: 60, shape: 'rect' },
-    ap: { rx: 48, ry: 28, shape: 'ellipse' }
+    ap: { rx: 72, ry: 36, shape: 'ellipse' }
   };
 
   const dim = dimensions[type] || dimensions.firewall;
