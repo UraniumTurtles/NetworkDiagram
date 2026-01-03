@@ -54,6 +54,11 @@ export default {
                             "y": 350
                         }
                     }
+                ],
+                links: [
+                    { from: { type: 'firewalls', id: 'KARN-61F-CITYHALL'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'} },
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW1'} },
+                    { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'} }
                 ]
             }
         }
