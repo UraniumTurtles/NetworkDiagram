@@ -9,7 +9,7 @@ export default {
             description: '',   
             address: '1007 N Hwy 123 Karnes City, TX 78118',
             diagram: {
-                size: { width: 960, height: 800 },
+                size: { width: 1000, height: 800 },
                 firewalls: [
                     {
                         "id": "KARN-61F-CITYHALL",
@@ -18,7 +18,7 @@ export default {
                         "serial": "FGT61FTK23004294",
                         "ip": "10.10.10.50",
                         "position": {
-                                "x": 400,
+                                "x": 500,
                                 "y": 60
                         }
                     }
@@ -30,7 +30,7 @@ export default {
                         "model": "USW-Pro-48-PoE",
                         "ip": "10.10.10.106",
                         "position": {
-                            "x": 400,
+                            "x": 500,
                             "y": 150
                         }
                     },
