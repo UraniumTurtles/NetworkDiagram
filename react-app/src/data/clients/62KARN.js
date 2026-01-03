@@ -96,6 +96,16 @@ export default {
                     { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-CONFROOM'} }
                 ]
             }
+        },
+        {
+            id: 'police-department',
+            name: 'Police Department',
+            description: 'Karnes City Police Department main office.',
+            address: '500 S Hwy 123 Karnes City, TX 78118',
+            diagram: {
+                size: { width: 960, height: 560 },
+                firewalls: [],
+            }
         }
     ],
 };
