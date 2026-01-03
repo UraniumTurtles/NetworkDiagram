@@ -19,7 +19,7 @@ export default {
                         "ip": "10.10.10.50",
                         "position": {
                                 "x": 400,
-                                "y": 80
+                                "y": 60
                         }
                     }
                 ],
