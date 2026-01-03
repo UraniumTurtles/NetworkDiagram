@@ -18,13 +18,32 @@ export default {
                         "serial": "FGT61FTK23004294",
                         "ip": "10.10.10.50",
                         "position": {
-                                "x": 480,
-                                "y": 100
+                                "x": 400,
+                                "y": 80
                         }
                     }
                 ],
                 switches: [
-
+                    {
+                        "id": "KARN-USWPRO48-CITYHALL-CORE",
+                        "name": "KARN-USWPRO48-CITYHALL-CORE",
+                        "model": "USW-Pro-48-PoE",
+                        "ip": "10.10.10.106",
+                        "position": {
+                            "x": 400,
+                            "y": 200
+                        }
+                    },
+                    {
+                        "id": "KARN-USWPRO48-CITYHALL-SW1",
+                        "name": "KARN-USWPRO48-CITYHALL-SW1",
+                        "model": "USW-Pro-48-PoE",
+                        "ip": "10.10.10.106",
+                        "position": {
+                            "x": 250,
+                            "y": 450
+                        }
+                    },
                 ]
             }
         }
