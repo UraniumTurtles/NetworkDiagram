@@ -45,8 +45,8 @@ export default {
                         }
                     },
                     {
-                        "id": "KARN-USWPRO-CITYHALL-SW1",
-                        "name": "KARN-USWPRO-CITYHALL-SW1",
+                        "id": "KARN-USWPRO-CITYHALL-SW2",
+                        "name": "KARN-USWPRO-CITYHALL-SW2",
                         "model": "USW-Pro-48-PoE",
                         "ip": "10.10.10.106",
                         "position": {
