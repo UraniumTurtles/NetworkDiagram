@@ -104,15 +104,6 @@ export default {
                             "x": 200,
                             "y": 60
                         }
-                    },
-                    {
-                        "id": "vpn-county",
-                        "name": "County VPN",
-                        "targetLocation": "County Office",
-                        "position": {
-                            "x": 800,
-                            "y": 60
-                        }
                     }
                 ],
                 vpnLinks: [
@@ -128,7 +119,48 @@ export default {
             address: '500 S Hwy 123 Karnes City, TX 78118',
             diagram: {
                 size: { width: 960, height: 560 },
-                firewalls: [],
+                firewalls: [
+                    {
+                        "id": "KARN-61F-PD",
+                        "name": "KARN-61F-PD",
+                        "model": "FortiGate 61F",
+                        "serial": "FGT61FTK23004787",
+                        "ip": "192.168.1.254",
+                        "position": {
+                                "x": 500,
+                                "y": 80
+                        }
+                    }
+                ],
+                switches: [
+                    {
+                        "id": "KARN-124FFPOE-PD-SW1",
+                        "name": "KARN-124FFPOE-PD-SW1",
+                        "model": "FortiSwitch 124F FPoE",
+                        "serial": "S124FFTF23038491",
+                        "ip": "192.168.1.40",
+                        "position": {
+                                "x": 400,
+                                "y": 120
+                        }
+                    },
+                    {
+                        "id": "KARN-124FFPOE-PD-SW2",
+                        "name": "KARN-124FFPOE-PD-SW2",
+                        "model": "FortiSwitch 124F FPoE",
+                        "serial": "S124FFTF23038144",
+                        "ip": "192.168.1.41",
+                        "position": {
+                                "x": 400,
+                                "y": 160
+                        }
+                    }
+                ],
+                accessPoints: [],
+                links: [
+                    { from: { type: 'firewalls', id: 'KARN-61F-PD'}, to: { type: 'switches', id: 'KARN-124FFPOE-PD-SW1'} },
+                    { from: { type: 'switches', id: 'KARN-124FFPOE-PD-SW1'}, to: { type: 'switches', id: 'KARN-124FFPOE-PD-SW2'} },
+                ],
             }
         }
     ],
