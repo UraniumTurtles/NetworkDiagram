@@ -94,6 +94,30 @@ export default {
                     { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-FRONTDESK'} },
                     { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-CORE'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-SERVERROOM'} },
                     { from: { type: 'switches', id: 'KARN-USWPRO-CITYHALL-SW2'}, to: { type: 'accessPoints', id: 'KARN-NANOHD-CITYHALL-CONFROOM'} }
+                ],
+                vpnClouds: [
+                    {
+                        "id": "vpn-police",
+                        "name": "VPN",
+                        "targetLocation": "Police Department",
+                        "position": {
+                            "x": 200,
+                            "y": 60
+                        }
+                    },
+                    {
+                        "id": "vpn-county",
+                        "name": "VPN",
+                        "targetLocation": "County Office",
+                        "position": {
+                            "x": 800,
+                            "y": 60
+                        }
+                    }
+                ],
+                vpnLinks: [
+                    { from: { type: 'firewalls', id: 'KARN-61F-CITYHALL'}, to: { id: 'vpn-police' }, label: 'IPSec' },
+                    { from: { type: 'firewalls', id: 'KARN-61F-CITYHALL'}, to: { id: 'vpn-county' }, label: 'IPSec' }
                 ]
             }
         },

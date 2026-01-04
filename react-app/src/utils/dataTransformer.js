@@ -59,6 +59,28 @@ export const transformDiagram = (diagram) => {
     });
   });
 
+  // Process VPN clouds
+  const vpnClouds = [];
+  const vpnCloudPositions = new Map(); // Track VPN cloud positions for connections
+
+  (diagram.vpnClouds || []).forEach(cloud => {
+    const transformedCloud = {
+      id: cloud.id,
+      name: cloud.name,
+      x: cloud.position.x,
+      y: cloud.position.y,
+      targetLocation: cloud.targetLocation
+    };
+
+    vpnClouds.push(transformedCloud);
+
+    // Store position for VPN connection drawing
+    vpnCloudPositions.set(cloud.id, {
+      x: cloud.position.x,
+      y: cloud.position.y
+    });
+  });
+
   // Process connections
   const connections = (diagram.links || []).map(link => {
     const fromKey = `${link.from.type}-${link.from.id}`;
@@ -79,6 +101,25 @@ export const transformDiagram = (diagram) => {
     };
   }).filter(Boolean); // Remove null connections
 
+  // Process VPN connections
+  const vpnConnections = (diagram.vpnLinks || []).map(link => {
+    // VPN links connect from a device to a VPN cloud
+    const fromKey = `${link.from.type}-${link.from.id}`;
+    const fromPos = devicePositions.get(fromKey);
+    const toPos = vpnCloudPositions.get(link.to.id);
+
+    if (!fromPos || !toPos) {
+      console.warn(`VPN connection missing position data: ${fromKey} -> vpn-${link.to.id}`);
+      return null;
+    }
+
+    return {
+      from: { x: fromPos.x, y: fromPos.y },
+      to: { x: toPos.x, y: toPos.y },
+      label: link.label || ''
+    };
+  }).filter(Boolean); // Remove null connections
+
   // Calculate viewBox based on diagram size
   const viewBox = diagram.size
     ? `0 0 ${diagram.size.width} ${diagram.size.height}`
@@ -87,7 +128,9 @@ export const transformDiagram = (diagram) => {
   return {
     viewBox,
     devices,
-    connections
+    connections,
+    vpnClouds,
+    vpnConnections
   };
 };
 
