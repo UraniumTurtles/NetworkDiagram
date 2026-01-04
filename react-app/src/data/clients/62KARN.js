@@ -51,7 +51,7 @@ export default {
                         "ip": "10.10.10.106",
                         "position": {
                             "x": 750,
-                            "y": 300
+                            "y": 250
                         }
                     }
                 ],
@@ -62,7 +62,7 @@ export default {
                         "model": "UAP-NanoHD",
                         "ip": "10.10.10.110",
                         "position": {
-                            "x": 200,
+                            "x": 250,
                             "y": 400
                         }
                     },
@@ -72,7 +72,7 @@ export default {
                         "model": "UAP-NanoHD",
                         "ip": "10.10.10.131",
                         "position": {
-                            "x": 600,
+                            "x": 750,
                             "y": 400
                         }
                     },
@@ -82,7 +82,7 @@ export default {
                         "model": "UAP-NanoHD",
                         "ip": "10.10.10.138",
                         "position": {
-                            "x": 400,
+                            "x": 500,
                             "y": 450
                         }
                     }
@@ -140,8 +140,8 @@ export default {
                         "serial": "S124FFTF23038491",
                         "ip": "192.168.1.40",
                         "position": {
-                                "x": 400,
-                                "y": 120
+                                "x": 500,
+                                "y": 150
                         }
                     },
                     {
@@ -151,8 +151,8 @@ export default {
                         "serial": "S124FFTF23038144",
                         "ip": "192.168.1.41",
                         "position": {
-                                "x": 400,
-                                "y": 160
+                                "x": 500,
+                                "y": 200
                         }
                     }
                 ],
