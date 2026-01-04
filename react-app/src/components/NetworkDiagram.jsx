@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import Device from './Device';
 import Connection from './Connection';
+import VPNCloud from './VPNCloud';
+import VPNConnection from './VPNConnection';
 import './NetworkDiagram.css';
 
 const NetworkDiagram = ({ data }) => {
-  const { devices = [], connections = [], viewBox = "0 0 960 560" } = data;
+  const { devices = [], connections = [], vpnClouds = [], vpnConnections = [], viewBox = "0 0 960 560" } = data;
 
   return (
     <div className="network-diagram-container">
@@ -43,6 +45,19 @@ const NetworkDiagram = ({ data }) => {
           ))}
         </g>
 
+        {/* VPN Connections layer */}
+        <g className="vpn-connections">
+          {vpnConnections.map((conn, index) => (
+            <VPNConnection
+              key={`vpn-conn-${index}`}
+              from={conn.from}
+              to={conn.to}
+              label={conn.label}
+              animated={true}
+            />
+          ))}
+        </g>
+
         {/* Devices layer */}
         <g className="devices">
           {devices.map((device, index) => (
@@ -56,6 +71,20 @@ const NetworkDiagram = ({ data }) => {
               serial={device.serial}
               ip={device.ip}
               onClick={() => console.log('Clicked:', device.name)}
+            />
+          ))}
+        </g>
+
+        {/* VPN Clouds layer */}
+        <g className="vpn-clouds">
+          {vpnClouds.map((cloud, index) => (
+            <VPNCloud
+              key={cloud.id || `vpn-cloud-${index}`}
+              name={cloud.name}
+              x={cloud.x}
+              y={cloud.y}
+              targetLocation={cloud.targetLocation}
+              onClick={() => console.log('Clicked VPN:', cloud.name)}
             />
           ))}
         </g>

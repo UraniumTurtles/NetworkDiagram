@@ -1,0 +1,37 @@
+/* VPN Cloud base styles */
+.vpn-cloud {
+  fill: rgba(220, 53, 69, 0.2);
+  stroke: rgba(220, 53, 69, 0.85);
+  stroke-width: 2.5;
+  transition: all 0.3s ease;
+}
+
+/* Glow effect */
+.vpn-cloud-glow {
+  fill: rgba(220, 53, 69, 0.4);
+  stroke: none;
+  filter: blur(8px);
+}
+
+/* Text styles */
+.vpn-cloud-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  fill: #333;
+  pointer-events: none;
+  user-select: none;
+}
+
+.vpn-cloud-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  fill: #666;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* VPN cloud group */
+.vpn-cloud-group {
+  transition: transform 0.3s ease;
+}
