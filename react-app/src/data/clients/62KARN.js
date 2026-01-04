@@ -98,7 +98,7 @@ export default {
                 vpnClouds: [
                     {
                         "id": "vpn-police",
-                        "name": "VPN",
+                        "name": "Police VPN",
                         "targetLocation": "Police Department",
                         "position": {
                             "x": 200,
@@ -107,7 +107,7 @@ export default {
                     },
                     {
                         "id": "vpn-county",
-                        "name": "VPN",
+                        "name": "County VPN",
                         "targetLocation": "County Office",
                         "position": {
                             "x": 800,
