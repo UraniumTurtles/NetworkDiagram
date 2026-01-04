@@ -56,9 +56,22 @@ const VPNCloud = ({ name, x, y, targetLocation, onClick }) => {
     }
   };
 
-  // Cloud shape - created with circles to form a cloud
-  const cloudWidth = 100;
-  const cloudHeight = 60;
+  // Cloud shape as a single SVG path
+  // Path creates a cloud outline using curves and arcs
+  const cloudPath = `
+    M ${x - 35} ${y + 5}
+    Q ${x - 35} ${y - 10}, ${x - 25} ${y - 18}
+    Q ${x - 15} ${y - 25}, ${x - 5} ${y - 30}
+    Q ${x + 5} ${y - 38}, ${x + 15} ${y - 35}
+    Q ${x + 25} ${y - 32}, ${x + 30} ${y - 25}
+    Q ${x + 40} ${y - 18}, ${x + 42} ${y - 5}
+    Q ${x + 44} ${y + 5}, ${x + 40} ${y + 12}
+    L ${x + 35} ${y + 15}
+    Q ${x + 20} ${y + 20}, ${x} ${y + 20}
+    Q ${x - 20} ${y + 20}, ${x - 35} ${y + 15}
+    Q ${x - 40} ${y + 12}, ${x - 35} ${y + 5}
+    Z
+  `;
 
   return (
     <motion.g
@@ -87,29 +100,23 @@ const VPNCloud = ({ name, x, y, targetLocation, onClick }) => {
       >
         {/* Glow effect when hovered */}
         {isHovered && (
-          <motion.g
+          <motion.path
+            d={cloudPath}
+            className="vpn-cloud-glow"
+            filter="url(#glow)"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.6 }}
             exit={{ opacity: 0 }}
-          >
-            <circle cx={x - 25} cy={y} r="22" className="vpn-cloud-glow" filter="url(#glow)" />
-            <circle cx={x + 25} cy={y} r="22" className="vpn-cloud-glow" filter="url(#glow)" />
-            <circle cx={x} cy={y - 15} r="27" className="vpn-cloud-glow" filter="url(#glow)" />
-            <circle cx={x} cy={y + 10} r="22" className="vpn-cloud-glow" filter="url(#glow)" />
-          </motion.g>
+          />
         )}
 
-        {/* Cloud shape made of overlapping circles */}
-        <motion.g variants={pulseVariants} animate={isHovered ? {} : "pulse"}>
-          {/* Left circle */}
-          <circle cx={x - 25} cy={y} r="20" className="vpn-cloud" />
-          {/* Right circle */}
-          <circle cx={x + 25} cy={y} r="20" className="vpn-cloud" />
-          {/* Top circle */}
-          <circle cx={x} cy={y - 15} r="25" className="vpn-cloud" />
-          {/* Bottom-center circle */}
-          <circle cx={x} cy={y + 10} r="20" className="vpn-cloud" />
-        </motion.g>
+        {/* Cloud shape as a single path */}
+        <motion.path
+          d={cloudPath}
+          className="vpn-cloud"
+          variants={pulseVariants}
+          animate={isHovered ? {} : "pulse"}
+        />
 
         {/* VPN label */}
         <motion.text
